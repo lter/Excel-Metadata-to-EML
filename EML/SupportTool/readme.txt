@@ -1,11 +1,11 @@
 README 
 
-EXCEL METADATA TO EML - Version 0.1
+EXCEL METADATA TO EML - Version 0.1  (updated 2/2/05)
 
 The standalone executables and the Perl script described below convert 
 LTER EML Metadata Submission Template files (see xls_eml_01.xls) 
 to EML 2.0.1.  The metadata template and this program are based on the 
-EML best practices document released in 2004. 
+EML best practices document released in October 2004. 
 
 This program was developed with support from the Florida Coastal Everglades (FCE), 
 Georgia Coastal Ecosystems (GCE), and Sevilleta (SEV) Long Term Ecological 
@@ -31,6 +31,16 @@ Research (LTER) programs.  Contributors to this Excel metadata template include:
   Department of Forest Science, Oregon State University and her students, Georgianne Moore, 
   Texas A&M University and Kate George, USDA.
 
+
+DOWNLOAD LOCATIONS
+
+    CVS - http://cvs.lternet.edu/cgi-bin/viewcvs.cgi/eml/tools/Excel2EML/
+      The CVS is hosted by the LTER Network Office and includes the latest version of all of the 
+      files mentioned below except for the executable files. 
+
+    FCE LTER - http://fcelter.fiu.edu/data/tools/
+      The FCE LTER download location includes executable files for Windows and OS X as well as all 
+      of the files mentioned below.
 
 LICENSE
 
@@ -69,20 +79,23 @@ METADATA TEMPLATE
 
 EXECUTABLE FILE
 
-  xls_eml_01.exe - Executable file
+  xls_eml_01.exe (Windows) or xls_eml_01.x11app (Mac OS X) - Executable file
 
     Converts the Metadata template above to an EML-compliant XML file.
     This version doesn't require Perl. 
 
-    The executable was generated on Windows XP from xls_eml_01.pl using Perl 5.8.4 and the 
+    The Windows executable was generated on Windows XP from xls_eml_01.pl using Perl 5.8.4 and the 
     PAR-0.85 Perl module (packages all of a script's required Perl components and modules into an 
-    executable file).  
+    executable file).  The Mac OS X executable was generated on Mac OS X Panther (10.3.7) from 
+    xls_eml_01.pl using Perl 5.8.6 and the PAR-0.87 Perl module using X11.  X11 is required to 
+    run the Mac executable.
 
     Command used to generate executable:
+      Windows:
+        pp --icon="icon3.ico" --link="xerces-c_2_3_0.dll" -o xls_eml_01.exe xls_eml_01.pl
 
-      pp --icon="icon3.ico" --link="xerces-c_2_3_0.dll" -o xls_eml_01.exe xls_eml_01.pl
-
-    This executable should only work on Windows operating systems.
+      Mac OS X:
+        pp -x -l="libxerces-c.25.dylib" -o xls_eml_01.x11app xls_eml_01.pl
 
 
 PERL SCRIPT
@@ -104,8 +117,16 @@ PERL SCRIPT
         - IO::Handle;
         - Getopt::Long;
 
-      - a xerces-c dll compatible with your version of XML::Xerces in your system path
+    Platform-specific requirements:
+
+      Windows:
+        - a xerces-c dll compatible with the version of XML::Xerces in your system path
         (I used xerces-c_2_3_0.dll to create the executable)
+
+      Mac OS X:
+        - libxerces-c.25.dylib or another version compatible with the version of XML::Xerces
+        - X Window System, Version 11 (X11). I think the script must be run from an xterm window 
+        due to Perl/Tk.
 
     Change the shebang (first line of the script) to point to the location of your Perl installation.
     perl xls_eml_01.pl
