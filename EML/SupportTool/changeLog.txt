@@ -1,0 +1,66 @@
+                   Change Log for FCE LTER EML Tool
+                   --------------------------------
+
+11/10/04  Duane Costa, LNO
+
+  Relocated files to a new CVS location, 'eml/tools/Excel2EML'. They were
+  originally at 'FCE/EML/SupportTool'. The reason for relocating the files
+  was to place them in a more publically-accessible location. The FCE
+  directory tree is intended for use by FCE personnel only.
+
+  Renamed the zip file from 'FCELTER_EML_Tools.zip' to 'xls_eml_01.zip'.
+  The new name is consistent with the other files in the tool set and has
+  the advantage that it contains the version number.
+
+  Corrected errors in the General Metadata worksheet in xls_eml_01.xls.
+  Row 107: Removed the "cc" entry. This appears to have been an error.
+  Row 108: Added 'authSystem="knb" order="allowFirst" scope="document"'
+  Row 109: Added 'uid=(site acronym here),o=lter,dc=ecoinformatics,dc=org'
+           This had previously been located in row 108 which is the wrong
+           location for this information.
+
+11/17/04  Duane Costa, LNO
+  Regenerated the zip file, replacing the xls_eml_01.exe with the
+  original version provided by Mike Rugge at FCE. THe version that was
+  generated at LNO was corrupt because we were using PAR-0.75 instead
+  of PAR-0.85.
+
+11/23/04  Mike Rugge, FCE
+  Made the following changes to the Access and Data table sections of xls_eml_01.pl:
+
+    Lines 2801-2812, 2832  (Print DATATABLE section)
+      Changed the access start tag if statement so that access tag and access 
+      authentication information will only be printed if this information is 
+      specified in the Excel template.  Also added an if statement to only print 
+      access authentication information if it's entered in the Excel template. 
+
+    Lines 2838-2347, 2849  (Print DATATABLE section)
+      Changed the dataTable start tag if statement so that the dataTable start tag 
+      will only be printed if data table information is entered in the Excel template.
+
+    Lines 3180-3189, 3191  (Print DATATABLE section)
+      Added the dataTable end tag if statement so that the dataTable start tag will 
+      only be printed if data table information is entered in the Excel template.
+
+    Lines 2923, 2930-2934, 2937-2939, 2942, 2948-2951, 2954, 2957, 2959, 2962-2964, 
+    2968-2970, 2973, 2979-2982, 2985, 2988, 2990, 2992-2994, 2997-3002, 3004, 3005, 
+    3007-3010, 3013-3015, 3018, 3049, 3054-3060, 3064-3066, 3069, 3133, 3138-3144, 
+    3152-3155, 3160-3166, 3169, 3175  (Print ATTRIBUTES section)
+      Made changes to indentation in the DataTable attribute list section.  
+      The attribute list start and end tags were at the same indentation as the 
+      datatable start and end tags, so I increased each indent level within the 
+      attribute list by one.
+
+    Line 3334  (EML Schema Validation section)
+      Replaced the semicolon at the end of the comment with a period.
+   
+  Regenerated the zip file to include the updated xls_eml_01.pl, xls_eml_01.exe,
+  and changeLog.txt files.  Regenerated the xls_eml_01.exe file using PAR-0.85.
+
+  Removed FCE_EML_Tools.zip and xls_eml_01.exe from the directory.
+
+  Updated with files from eml/tools/Excel2EML.
+
+
+
+
