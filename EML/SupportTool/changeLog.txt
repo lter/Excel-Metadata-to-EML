@@ -61,6 +61,42 @@
 
   Updated with files from eml/tools/Excel2EML.
 
+2/2/05  Mike Rugge and Linda Powell, FCE
+ xls_eml_01.pl modified by Mike Rugge:
+    1)  Moved the operating system detection (lines 183-194) to the beginning 
+    of the script (lines 50-81).  Modified the OS detection and the Tk frames 
+    sections (lines 83,87,92,104,111,112,150,155,162,170,197,207,222,334,351,388,431,446,449) 
+    to customize the frame size, background, position, and font based 
+    on the operating system (Windows, Darwin, or other).
 
+    2)  Changed line 1420 so that the script will look for multiple project numbers in 
+    separate columns rather than in the same column separated by vertical lines.  Line 146
+    in the metadata template (xls_eml_01.xls) was also modified to request entry of 
+    multiple research project numbers in separate columns.  We made these changes to make the 
+    research project line more consistent with other sections of the template (such as 
+    lines 113 and 114, Methods citations and protocols).
+  
+ readme.txt modified by Mike Rugge:  
+    1) Added a section listing URLs for the CVS and the FCE LTER download locations. The FCE 
+    LTER location includes executables for Windows and OS x, as well as all of the files in 
+    the CVS.  
+
+    2) Modified the Executable File section to include information about how to
+    create an executable for OS X. Modified the Perl Script section to include 
+    platform-specific requirements for the perl script.
+
+ xls_eml_01.xls and xls_eml_01_SAMPLE.xls modified by Linda Powell:
+    1) Added macro called 'DeleteAllHyperlinks' to handle case when Microsoft Excel inserts 
+    erroneous hyperlinks into template's worksheets.
+
+    2) Changed the formats of the date cells to be text as opposed to a date.
+
+ xls_eml_01.doc modified by Linda Powell:
+    Added documentation for the macro called 'DeleteAllHyperlinks'.
+ 
+ We regenerated the zip file to include the updated xls_eml_01.pl, xls_eml_01.xls, readme.txt,
+ and changeLog.txt files.
+
+ Updated with files from eml/tools/Excel2EML.
 
 
