@@ -416,7 +416,7 @@ $progress = $bottom->ProgressBar(
     -to       => 100,
     -blocks   => 50,
     -colors   => [ 0, '#6CD998', 50, '#6CD998', 100, '#6CD998' ],
-    -variable => \$percent_done
+#    -variable => \$percent_done
 )->pack( -side => "right" );
 
 $bottom->Label(
@@ -736,6 +736,7 @@ sub convertToEML {
         $percent_done  = 0;
         $files_done    = 0;
         $EML_file_done = 0;
+        $progress->configure(-value => $percent_done);
         $progress->update;
 
         $total_files = $#file_list + 1;
@@ -807,11 +808,13 @@ sub convertToEML {
                             $files_done   = $files_done2;
                             $percent_done = ( $files_done / $total_files ) * 100;
 
+                            $progress->configure(-value => $percent_done);
                             $progress->update;
                         }
                         else {
                             $files_done   = $files_done + 1;
                             $percent_done = ( $files_done / $total_files ) * 100;
+                            $progress->configure(-value => $percent_done);
                             $progress->update;
                             $lb_out->insert( "end", ":-O  " . "$xls_filename" . " does not seem to be an Excel Metadata file." );
                             $lb_out->insert( "end", "      (cell B21 should be Dataset Title)" );
@@ -822,6 +825,7 @@ sub convertToEML {
                     else {
                         $files_done   = $files_done + 1;
                         $percent_done = ( $files_done / $total_files ) * 100;
+                        $progress->configure(-value => $percent_done);
                         $progress->update;
                         $lb_out->insert( "end", ":-O  " . "$xls_filename" . " does not seem to be an Excel Metadata file." );
                         $lb_out->insert( "end", "      (cell B21 should be Dataset Title)" );
@@ -831,12 +835,14 @@ sub convertToEML {
                 else {
                     $files_done   = $files_done + 1;
                     $percent_done = ( $files_done / $total_files ) * 100;
+                    $progress->configure(-value => $percent_done);
                     $progress->update;
                     $lb_out->insert( "end", ":-O  " . "$xls_filename" . " does not have an xls extension." );
                     $lb_out->insert( "end", " " );
                 }
 
                 $percent_done = ( $files_done / $total_files ) * 100;
+                $progress->configure(-value => $percent_done);
                 $progress->update;
             }
             else {
@@ -846,6 +852,7 @@ sub convertToEML {
                     $percent_done = 100;
                     $lb_out->insert( "end", "EML conversion stopped!" );
                     $lb_out->insert( "end", " " );
+                    $progress->configure(-value => $percent_done);
                     $progress->update;
                     $end_loop = 1;
                 }
@@ -907,6 +914,7 @@ sub createEMLFile {
     $total_files  = $_[4];
     $files_done   = $_[5];
     $percent_done = ( $files_done / $total_files ) * 100;
+    $progress->configure(-value => $percent_done);
     $progress->update;
 
     my $Excel = new Spreadsheet::ParseExcel;
@@ -921,6 +929,7 @@ sub createEMLFile {
     sub percentDone {
         $files_done   = $files_done + .1;
         $percent_done = ( $files_done / $total_files ) * 100;
+        $progress->configure(-value => $percent_done);
         $progress->update;
         return $files_done;
     }
@@ -1433,6 +1442,7 @@ sub createEMLFile {
         $lb_out->insert( "end", "       ($_[0])." );
         $lb_out->insert( "end", "       Please verify that this directory exists and that you can write to the directory." );
         $percent_done = 100;
+        $progress->configure(-value => $percent_done);
         $progress->update;
 
     }
