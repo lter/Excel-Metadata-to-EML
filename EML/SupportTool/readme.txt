@@ -1,6 +1,6 @@
 README 
 
-EXCEL METADATA TO EML - Version 0.1  (updated 2/2/05)
+EXCEL METADATA TO EML - Version 0.1  (updated 2/8/05)
 
 The standalone executables and the Perl script described below convert 
 LTER EML Metadata Submission Template files (see xls_eml_01.xls) 
@@ -30,8 +30,8 @@ Research (LTER) programs.  Contributors to this Excel metadata template include:
   Working in cooperation with the Evergreen State College contributors are Professor Barbara Bond, 
   Department of Forest Science, Oregon State University and her students, Georgianne Moore, 
   Texas A&M University and Kate George, USDA.
-
-
+  
+  
 DOWNLOAD LOCATIONS
 
     CVS - http://cvs.lternet.edu/cgi-bin/viewcvs.cgi/eml/tools/Excel2EML/
@@ -39,8 +39,9 @@ DOWNLOAD LOCATIONS
       files mentioned below except for the executable files. 
 
     FCE LTER - http://fcelter.fiu.edu/data/tools/
-      The FCE LTER download location includes executable files for Windows and OS X as well as all 
-      of the files mentioned below.
+      The FCE LTER download location includes links to the Windows and Mac OS X zip files hosted
+      on the LTER Network Office CVS.
+
 
 LICENSE
 
@@ -93,7 +94,6 @@ EXECUTABLE FILE
     Command used to generate executable:
       Windows:
         pp --icon="icon3.ico" --link="xerces-c_2_3_0.dll" -o xls_eml_01.exe xls_eml_01.pl
-
       Mac OS X:
         pp -x -l="libxerces-c.25.dylib" -o xls_eml_01.x11app xls_eml_01.pl
 
@@ -118,7 +118,6 @@ PERL SCRIPT
         - Getopt::Long;
 
     Platform-specific requirements:
-
       Windows:
         - a xerces-c dll compatible with the version of XML::Xerces in your system path
         (I used xerces-c_2_3_0.dll to create the executable)
@@ -153,6 +152,7 @@ NOTES
 
        - Keep the size of the Excel Metadata Template files as small as possible.  For example, if you don't have 
        any methods citations, you could clear all of the cells in the methodsCitation sheet to reduce the size of the file.
+
        Please note that every worksheet needs to be present in the specified order for the program to work, though.
 
 
@@ -188,7 +188,7 @@ INSTRUCTIONS
        Validation against the specified EML schema (the EML and STMML Schema URLs or file paths) is optional, but 
        checked (enabled) by default. Validation warnings and errors will be displayed in the program's log and
        recorded in an error log file (error.log). 
-    
+  
     4. Select a destination directory for EML files.  
     If this field is blank, all EML files will be saved in the same directory as their source Excel file.  
 
@@ -210,6 +210,10 @@ FEEDBACK, BUG REPORTS
     Linda Powell                           Mike Rugge
     powell@fiu.edu                         ruggem@fiu.edu
     FCE LTER Information Manager           FCE LTER Program Manager
+
     
+
     
+
+
 
