@@ -61,6 +61,8 @@
 
   Updated with files from eml/tools/Excel2EML.
 
+
+
 2/2/05  Mike Rugge and Linda Powell, FCE
  xls_eml_01.pl modified by Mike Rugge:
     1)  Moved the operating system detection (lines 183-194) to the beginning 
@@ -99,4 +101,12 @@
 
  Updated with files from eml/tools/Excel2EML.
 
+2/8/05 Mike Rugge, FCE
+
+    1) Generated a new zip file which includes an executable file for Mac OS X.  I named the Mac 
+    OS X zip file "xls_eml_01_MacOSX.zip" and renamed the zip file containing the Windows
+    executable to "xls_eml_01_Windows.zip."
+    
+    2) Modified the Download Locations section of the readme file. The FCE LTER download location 
+    includes links to the Windows and Mac OS X zip files hosted on the LTER Network Office CVS.
 
