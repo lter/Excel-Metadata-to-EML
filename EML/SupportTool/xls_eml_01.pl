@@ -410,13 +410,14 @@ $bottom->Label(
 )->pack( -side => "right" );
 
 $progress = $bottom->ProgressBar(
-    -width    => 20,
-    -length   => 250,
-    -from     => 0,
-    -to       => 100,
-    -blocks   => 50,
-    -colors   => [ 0, '#6CD998', 50, '#6CD998', 100, '#6CD998' ],
-#    -variable => \$percent_done
+    -width  => 20,
+    -length => 250,
+    -from   => 0,
+    -to     => 100,
+    -blocks => 50,
+    -colors => [ 0, '#6CD998', 50, '#6CD998', 100, '#6CD998' ],
+
+    #    -variable => \$percent_done
 )->pack( -side => "right" );
 
 $bottom->Label(
@@ -736,7 +737,7 @@ sub convertToEML {
         $percent_done  = 0;
         $files_done    = 0;
         $EML_file_done = 0;
-        $progress->configure(-value => $percent_done);
+        $progress->configure( -value => $percent_done );
         $progress->update;
 
         $total_files = $#file_list + 1;
@@ -808,13 +809,13 @@ sub convertToEML {
                             $files_done   = $files_done2;
                             $percent_done = ( $files_done / $total_files ) * 100;
 
-                            $progress->configure(-value => $percent_done);
+                            $progress->configure( -value => $percent_done );
                             $progress->update;
                         }
                         else {
                             $files_done   = $files_done + 1;
                             $percent_done = ( $files_done / $total_files ) * 100;
-                            $progress->configure(-value => $percent_done);
+                            $progress->configure( -value => $percent_done );
                             $progress->update;
                             $lb_out->insert( "end", ":-O  " . "$xls_filename" . " does not seem to be an Excel Metadata file." );
                             $lb_out->insert( "end", "      (cell B21 should be Dataset Title)" );
@@ -825,7 +826,7 @@ sub convertToEML {
                     else {
                         $files_done   = $files_done + 1;
                         $percent_done = ( $files_done / $total_files ) * 100;
-                        $progress->configure(-value => $percent_done);
+                        $progress->configure( -value => $percent_done );
                         $progress->update;
                         $lb_out->insert( "end", ":-O  " . "$xls_filename" . " does not seem to be an Excel Metadata file." );
                         $lb_out->insert( "end", "      (cell B21 should be Dataset Title)" );
@@ -835,14 +836,14 @@ sub convertToEML {
                 else {
                     $files_done   = $files_done + 1;
                     $percent_done = ( $files_done / $total_files ) * 100;
-                    $progress->configure(-value => $percent_done);
+                    $progress->configure( -value => $percent_done );
                     $progress->update;
                     $lb_out->insert( "end", ":-O  " . "$xls_filename" . " does not have an xls extension." );
                     $lb_out->insert( "end", " " );
                 }
 
                 $percent_done = ( $files_done / $total_files ) * 100;
-                $progress->configure(-value => $percent_done);
+                $progress->configure( -value => $percent_done );
                 $progress->update;
             }
             else {
@@ -852,7 +853,7 @@ sub convertToEML {
                     $percent_done = 100;
                     $lb_out->insert( "end", "EML conversion stopped!" );
                     $lb_out->insert( "end", " " );
-                    $progress->configure(-value => $percent_done);
+                    $progress->configure( -value => $percent_done );
                     $progress->update;
                     $end_loop = 1;
                 }
@@ -914,7 +915,7 @@ sub createEMLFile {
     $total_files  = $_[4];
     $files_done   = $_[5];
     $percent_done = ( $files_done / $total_files ) * 100;
-    $progress->configure(-value => $percent_done);
+    $progress->configure( -value => $percent_done );
     $progress->update;
 
     my $Excel = new Spreadsheet::ParseExcel;
@@ -929,7 +930,7 @@ sub createEMLFile {
     sub percentDone {
         $files_done   = $files_done + .1;
         $percent_done = ( $files_done / $total_files ) * 100;
-        $progress->configure(-value => $percent_done);
+        $progress->configure( -value => $percent_done );
         $progress->update;
         return $files_done;
     }
@@ -1442,7 +1443,7 @@ sub createEMLFile {
         $lb_out->insert( "end", "       ($_[0])." );
         $lb_out->insert( "end", "       Please verify that this directory exists and that you can write to the directory." );
         $percent_done = 100;
-        $progress->configure(-value => $percent_done);
+        $progress->configure( -value => $percent_done );
         $progress->update;
 
     }
@@ -2797,31 +2798,55 @@ sub createEMLFile {
     # Print ACCESS SECTION #
     ########################
 
-    print XML "$indent$indent" . "<access " . "$dataset_access_authentication_info" . ">\n";
+    if ( $dataset_access_authentication_info || @dataset_principal_permission_info || @dataset_principal_access_info ) {
 
-    my $access = 0;
+        if ($dataset_access_authentication_info) {
 
-    while ( $access <= $#dataset_principal_access_info ) {
-
-        if ( @dataset_principal_permission_info && @dataset_principal_access_info ) {
-
-            printXMLStartTag( "allow", "3" );
-
-            printXMLString( $dataset_principal_access_info[$access],     "principal",  "4" );
-            printXMLString( $dataset_principal_permission_info[$access], "permission", "4" );
-
-            printXMLEndTag( "allow", "3" );
+            print XML "$indent$indent" . "<access " . "$dataset_access_authentication_info" . ">\n";
 
         }
-        $access = $access + 1;
+        else {
+
+            print XML "$indent$indent" . "<access>\n";
+
+        }
+
+        my $access = 0;
+
+        while ( $access <= $#dataset_principal_access_info ) {
+
+            if ( @dataset_principal_permission_info && @dataset_principal_access_info ) {
+
+                printXMLStartTag( "allow", "3" );
+
+                printXMLString( $dataset_principal_access_info[$access],     "principal",  "4" );
+                printXMLString( $dataset_principal_permission_info[$access], "permission", "4" );
+
+                printXMLEndTag( "allow", "3" );
+
+            }
+            $access = $access + 1;
+        }
+        printXMLEndTag( "access", "2" );
+
     }
-    printXMLEndTag( "access", "2" );
 
     ############################
     # Print DATATABLE section  #
     ############################
 
-    printXMLStartTag( "dataTable", "2" );
+    if (   @data_entity_name
+        || @data_entity_desc
+        || $data_object_name
+        || $num_header_lines
+        || $num_data_records
+        || $data_attribute_orientation
+        || $data_field_delimiter
+        || $data_external_format
+        || @attribute_name )
+    {
+        printXMLStartTag( "dataTable", "2" );
+    }
 
     if (@data_entity_name) {
         my $entity_name = 0;
@@ -2832,7 +2857,15 @@ sub createEMLFile {
             printXMLString( $data_entity_desc[$entity_name], "entityDescription", "3" );
             $entity_name = $entity_name + 1;
         }
+    }
 
+    if (   $data_object_name
+        || $num_header_lines
+        || $num_data_records
+        || $data_attribute_orientation
+        || $data_field_delimiter
+        || $data_external_format )
+    {
         printXMLStartTag( "physical", "3" );
         printXMLString( $data_object_name, "objectName", "4" );
 
@@ -2876,128 +2909,209 @@ sub createEMLFile {
         }
 
         printXMLEndTag( "physical", "3" );
+    }
 
-        ############
-        percentDone;
-        ############
+    ############
+    percentDone;
+    ############
 
-        ############################
-        # Print ATTRIBUTES section #
-        ############################
+    ############################
+    # Print ATTRIBUTES section #
+    ############################
 
-        if (@attribute_name) {
-            printXMLStartTag( "attributeList", "2" );
+    if (@attribute_name) {
+        printXMLStartTag( "attributeList", "3" );
 
-            my $attribute_num   = 1;
-            my $attribute_count = 0;
+        my $attribute_num   = 1;
+        my $attribute_count = 0;
 
-            while ( $attribute_count <= $#attribute_name ) {
+        while ( $attribute_count <= $#attribute_name ) {
 
-                printXMLStartTag( "attribute", "3", "att.$attribute_num" );
-                printXMLString( $attribute_name[$attribute_count],       "attributeName",       "4" );
-                printXMLString( $attribute_label[$attribute_count],      "attributeLabel",      "4" );
-                printXMLString( $attribute_definition[$attribute_count], "attributeDefinition", "4" );
-                printXMLString( $variable_type[$attribute_count],        "storageType",         "4" );
+            printXMLStartTag( "attribute", "4", "att.$attribute_num" );
+            printXMLString( $attribute_name[$attribute_count],       "attributeName",       "5" );
+            printXMLString( $attribute_label[$attribute_count],      "attributeLabel",      "5" );
+            printXMLString( $attribute_definition[$attribute_count], "attributeDefinition", "5" );
+            printXMLString( $variable_type[$attribute_count],        "storageType",         "5" );
 
-                if ( $measurement_scale[$attribute_count] eq 'nominal' ) {
-                    printXMLStartTag( "measurementScale", "4" );
-                    printXMLStartTag( "nominal",          "5" );
-                    printXMLStartTag( "nonNumericDomain", "6" );
+            if ( $measurement_scale[$attribute_count] eq 'nominal' ) {
+                printXMLStartTag( "measurementScale", "5" );
+                printXMLStartTag( "nominal",          "6" );
+                printXMLStartTag( "nonNumericDomain", "7" );
 
-                    if ( $codeset_name[$attribute_count] ) {
-                        printXMLStartTag( "enumeratedDomain", "7" );
+                if ( $codeset_name[$attribute_count] ) {
+                    printXMLStartTag( "enumeratedDomain", "8" );
 
-                        my @codes = split( /\|/, $codeset_name[$attribute_count] );
-                        my $pair;
-                        foreach $pair (@codes) {
-                            my @codeset = split( /\=/, $pair );
-                            printXMLStartTag( "codeDefinition", "8" );
-                            printXMLString( $codeset[0], "code",       "9" );
-                            printXMLString( $codeset[1], "definition", "9" );
-                            printXMLEndTag( "codeDefinition", "8" );
-                        }
-
-                        printXMLEndTag( "enumeratedDomain", "7" );
-                    }
-                    else {
-                        printXMLStartTag( "textDomain", "7" );
-                        printXMLString( $attribute_definition[$attribute_count], "definition", "9" );
-                        printXMLEndTag( "textDomain", "7" );
+                    my @codes = split( /\|/, $codeset_name[$attribute_count] );
+                    my $pair;
+                    foreach $pair (@codes) {
+                        my @codeset = split( /\=/, $pair );
+                        printXMLStartTag( "codeDefinition", "9" );
+                        printXMLString( $codeset[0], "code",       "10" );
+                        printXMLString( $codeset[1], "definition", "10" );
+                        printXMLEndTag( "codeDefinition", "9" );
                     }
 
-                    printXMLEndTag( "nonNumericDomain", "6" );
-                    printXMLEndTag( "nominal",          "5" );
-                    printXMLEndTag( "measurementScale", "4" );
-
+                    printXMLEndTag( "enumeratedDomain", "8" );
                 }
-                if ( $measurement_scale[$attribute_count] eq 'ordinal' ) {
-                    printXMLStartTag( "measurementScale", "4" );
-                    printXMLStartTag( "ordinal",          "5" );
-                    printXMLStartTag( "nonNumericDomain", "6" );
-
-                    if ( $codeset_name[$attribute_count] ) {
-                        printXMLStartTag( "enumeratedDomain", "7" );
-
-                        my @codes = split( /\|/, $codeset_name[$attribute_count] );
-                        my $pair;
-                        foreach $pair (@codes) {
-                            my @codeset = split( /\=/, $pair );
-                            printXMLStartTag( "codeDefinition", "8" );
-                            printXMLString( $codeset[0], "code",       "9" );
-                            printXMLString( $codeset[1], "definition", "9" );
-                            printXMLEndTag( "codeDefinition", "8" );
-                        }
-
-                        printXMLEndTag( "enumeratedDomain", "7" );
-                    }
-                    else {
-                        printXMLStartTag( "textDomain", "7" );
-                        printXMLString( $attribute_definition[$attribute_count], "definition", "9" );
-                        printXMLEndTag( "textDomain", "7" );
-                    }
-                    printXMLEndTag( "nonNumericDomain", "6" );
-                    printXMLEndTag( "ordinal",          "5" );
-                    printXMLEndTag( "measurementScale", "4" );
+                else {
+                    printXMLStartTag( "textDomain", "8" );
+                    printXMLString( $attribute_definition[$attribute_count], "definition", "9" );
+                    printXMLEndTag( "textDomain", "8" );
                 }
-                elsif ( $measurement_scale[$attribute_count] eq 'datetime' ) {
-                    printXMLStartTag( "measurementScale", "4" );
-                    printXMLStartTag( "datetime",         "5" );
-                    printXMLString( $date_time_format[$attribute_count], "formatString",      "6" );
-                    printXMLString( $precision[$attribute_count],        "dateTimePrecision", "6" );
-                    printXMLStartTag( "dateTimeDomain", "6" );
-                    printXMLStartTag( "bounds",         "7" );
-                    if ( @date_time_min && @date_time_max ) {
-                        printXMLString( $date_time_min[$attribute_count], "minimum", "8", "false", "exclusive" );
-                        printXMLString( $date_time_max[$attribute_count], "maximum", "8", "false", "exclusive" );
+
+                printXMLEndTag( "nonNumericDomain", "7" );
+                printXMLEndTag( "nominal",          "6" );
+                printXMLEndTag( "measurementScale", "5" );
+
+            }
+            if ( $measurement_scale[$attribute_count] eq 'ordinal' ) {
+                printXMLStartTag( "measurementScale", "5" );
+                printXMLStartTag( "ordinal",          "6" );
+                printXMLStartTag( "nonNumericDomain", "7" );
+
+                if ( $codeset_name[$attribute_count] ) {
+                    printXMLStartTag( "enumeratedDomain", "8" );
+
+                    my @codes = split( /\|/, $codeset_name[$attribute_count] );
+                    my $pair;
+                    foreach $pair (@codes) {
+                        my @codeset = split( /\=/, $pair );
+                        printXMLStartTag( "codeDefinition", "9" );
+                        printXMLString( $codeset[0], "code",       "10" );
+                        printXMLString( $codeset[1], "definition", "10" );
+                        printXMLEndTag( "codeDefinition", "9" );
                     }
-                    printXMLEndTag( "bounds",           "7" );
-                    printXMLEndTag( "dateTimeDomain",   "6" );
-                    printXMLEndTag( "datetime",         "5" );
-                    printXMLEndTag( "measurementScale", "4" );
+
+                    printXMLEndTag( "enumeratedDomain", "8" );
                 }
-                elsif ( $measurement_scale[$attribute_count] eq 'interval' ) {
-                    printXMLStartTag( "measurementScale", "4" );
-                    printXMLStartTag( "interval",         "5" );
-                    printXMLStartTag( "unit",             "6" );
+                else {
+                    printXMLStartTag( "textDomain", "8" );
+                    printXMLString( $attribute_definition[$attribute_count], "definition", "9" );
+                    printXMLEndTag( "textDomain", "8" );
+                }
+                printXMLEndTag( "nonNumericDomain", "7" );
+                printXMLEndTag( "ordinal",          "6" );
+                printXMLEndTag( "measurementScale", "5" );
+            }
+            elsif ( $measurement_scale[$attribute_count] eq 'datetime' ) {
+                printXMLStartTag( "measurementScale", "5" );
+                printXMLStartTag( "datetime",         "6" );
+                printXMLString( $date_time_format[$attribute_count], "formatString",      "7" );
+                printXMLString( $precision[$attribute_count],        "dateTimePrecision", "7" );
+                printXMLStartTag( "dateTimeDomain", "7" );
+                printXMLStartTag( "bounds",         "8" );
+                if ( @date_time_min && @date_time_max ) {
+                    printXMLString( $date_time_min[$attribute_count], "minimum", "9", "false", "exclusive" );
+                    printXMLString( $date_time_max[$attribute_count], "maximum", "9", "false", "exclusive" );
+                }
+                printXMLEndTag( "bounds",           "8" );
+                printXMLEndTag( "dateTimeDomain",   "7" );
+                printXMLEndTag( "datetime",         "6" );
+                printXMLEndTag( "measurementScale", "5" );
+            }
+            elsif ( $measurement_scale[$attribute_count] eq 'interval' ) {
+                printXMLStartTag( "measurementScale", "5" );
+                printXMLStartTag( "interval",         "6" );
+                printXMLStartTag( "unit",             "7" );
 
-                    if ( $custom_or_eml[$attribute_count] eq 'EML' ) {
-                        printXMLString( $units[$attribute_count], "standardUnit", "7" );
-                    }
+                if ( $custom_or_eml[$attribute_count] eq 'EML' ) {
+                    printXMLString( $units[$attribute_count], "standardUnit", "8" );
+                }
 
-                    elsif ( $custom_or_eml[$attribute_count] eq 'CUSTOM' ) {
-                        my $unit;
-                        my $repeat = 0;
-                        if (@custom_unit_list) {
-                            foreach $unit (@custom_unit_list) {
-                                if ( $unit eq $units[$attribute_count] ) {
-                                    $repeat = "yes";
-                                }
+                elsif ( $custom_or_eml[$attribute_count] eq 'CUSTOM' ) {
+                    my $unit;
+                    my $repeat = 0;
+                    if (@custom_unit_list) {
+                        foreach $unit (@custom_unit_list) {
+                            if ( $unit eq $units[$attribute_count] ) {
+                                $repeat = "yes";
                             }
                         }
-                        if ( $repeat eq "yes" ) {
+                    }
+                    if ( $repeat eq "yes" ) {
+                    }
+                    else {
+                        my $custom_unit_stmml;
+                        $custom_unit_stmml =
+                            "<stmml:unit name=\""
+                          . "$units[$attribute_count]"
+                          . "\" unitType=\""
+                          . "$custom_unitType[$attribute_count]"
+                          . "\" id=\""
+                          . "$custom_unitID[$attribute_count]"
+                          . "\" parentSI=\""
+                          . "$custom_unitParentSI[$attribute_count]"
+                          . "\"  multiplierToSI=\""
+                          . "$custom_unitMultiplierToSI[$attribute_count]" . "\">";
+                        push( @custom_unit_stmml_tag, $custom_unit_stmml );
+                        push( @custom_unit_list,      $units[$attribute_count] );
+                    }
+                    printXMLString( $units[$attribute_count], "customUnit", "8" );
+                }
+                else {
+                }
+
+                printXMLEndTag( "unit", "7" );
+                printXMLString( $precision[$attribute_count], "precision", "8" );
+                printXMLStartTag( "numericDomain", "8" );
+                printXMLString( $number_type[$attribute_count], "numberType", "9" );
+                printXMLEndTag( "numericDomain",    "8" );
+                printXMLEndTag( "interval",         "6" );
+                printXMLEndTag( "measurementScale", "5" );
+
+            }
+            elsif ( $measurement_scale[$attribute_count] eq 'ratio' ) {
+                printXMLStartTag( "measurementScale", "5" );
+                printXMLStartTag( "ratio",            "6" );
+                printXMLStartTag( "unit",             "7" );
+
+                if ( $custom_or_eml[$attribute_count] eq 'EML' ) {
+                    printXMLString( $units[$attribute_count], "standardUnit", "8" );
+                }
+
+                elsif ( $custom_or_eml[$attribute_count] eq 'CUSTOM' ) {
+                    my $unit;
+                    my $repeat = 0;
+                    if (@custom_unit_list) {
+                        foreach $unit (@custom_unit_list) {
+                            if ( $unit eq $units[$attribute_count] ) {
+                                $repeat = "yes";
+                            }
+                        }
+                    }
+                    if ( $repeat eq "yes" ) {
+                    }
+                    else {
+                        my $custom_unit_stmml;
+                        my $custom_unit_stmml_desc;
+
+                        if (   !$custom_unitParentSI[$attribute_count]
+                            && !$custom_unitMultiplierToSI[$attribute_count] )
+                        {
+
+                            $custom_unit_stmml =
+                                "<stmml:unit name=\""
+                              . "$units[$attribute_count]"
+                              . "\" unitType=\""
+                              . "$custom_unitType[$attribute_count]"
+                              . "\" id=\""
+                              . "$custom_unitID[$attribute_count]" . "\">";
+                        }
+                        elsif ( !$custom_unitParentSI[$attribute_count]
+                            && $custom_unitMultiplierToSI[$attribute_count] )
+                        {
+
+                            $custom_unit_stmml =
+                                "<stmml:unit name=\""
+                              . "$units[$attribute_count]"
+                              . "\" unitType=\""
+                              . "$custom_unitType[$attribute_count]"
+                              . "\" id=\""
+                              . "$custom_unitID[$attribute_count]"
+                              . "\"  multiplierToSI=\""
+                              . "$custom_unitMultiplierToSI[$attribute_count]" . "\">";
                         }
                         else {
-                            my $custom_unit_stmml;
                             $custom_unit_stmml =
                                 "<stmml:unit name=\""
                               . "$units[$attribute_count]"
@@ -3009,141 +3123,72 @@ sub createEMLFile {
                               . "$custom_unitParentSI[$attribute_count]"
                               . "\"  multiplierToSI=\""
                               . "$custom_unitMultiplierToSI[$attribute_count]" . "\">";
-                            push( @custom_unit_stmml_tag, $custom_unit_stmml );
-                            push( @custom_unit_list,      $units[$attribute_count] );
                         }
-                        printXMLString( $units[$attribute_count], "customUnit", "7" );
-                    }
-                    else {
-                    }
+                        $custom_unit_stmml_desc = "<stmml:description>" . "$custom_unitDesc[$attribute_count]" . "</stmml:description>";
 
-                    printXMLEndTag( "unit", "6" );
-                    printXMLString( $precision[$attribute_count], "precision", "7" );
-                    printXMLStartTag( "numericDomain", "7" );
-                    printXMLString( $number_type[$attribute_count], "numberType", "8" );
-                    printXMLEndTag( "numericDomain",    "7" );
-                    printXMLEndTag( "interval",         "5" );
-                    printXMLEndTag( "measurementScale", "4" );
-
+                        push( @custom_unit_stmml_tag,      $custom_unit_stmml );
+                        push( @custom_unit_stmml_desc_tag, $custom_unit_stmml_desc );
+                        push( @custom_unit_list,           $units[$attribute_count] );
+                    }
+                    printXMLString( $units[$attribute_count], "customUnit", "8" );
                 }
-                elsif ( $measurement_scale[$attribute_count] eq 'ratio' ) {
-                    printXMLStartTag( "measurementScale", "4" );
-                    printXMLStartTag( "ratio",            "5" );
-                    printXMLStartTag( "unit",             "6" );
-
-                    if ( $custom_or_eml[$attribute_count] eq 'EML' ) {
-                        printXMLString( $units[$attribute_count], "standardUnit", "7" );
-                    }
-
-                    elsif ( $custom_or_eml[$attribute_count] eq 'CUSTOM' ) {
-                        my $unit;
-                        my $repeat = 0;
-                        if (@custom_unit_list) {
-                            foreach $unit (@custom_unit_list) {
-                                if ( $unit eq $units[$attribute_count] ) {
-                                    $repeat = "yes";
-                                }
-                            }
-                        }
-                        if ( $repeat eq "yes" ) {
-                        }
-                        else {
-                            my $custom_unit_stmml;
-                            my $custom_unit_stmml_desc;
-
-                            if (   !$custom_unitParentSI[$attribute_count]
-                                && !$custom_unitMultiplierToSI[$attribute_count] )
-                            {
-
-                                $custom_unit_stmml =
-                                    "<stmml:unit name=\""
-                                  . "$units[$attribute_count]"
-                                  . "\" unitType=\""
-                                  . "$custom_unitType[$attribute_count]"
-                                  . "\" id=\""
-                                  . "$custom_unitID[$attribute_count]" . "\">";
-                            }
-                            elsif ( !$custom_unitParentSI[$attribute_count]
-                                && $custom_unitMultiplierToSI[$attribute_count] )
-                            {
-
-                                $custom_unit_stmml =
-                                    "<stmml:unit name=\""
-                                  . "$units[$attribute_count]"
-                                  . "\" unitType=\""
-                                  . "$custom_unitType[$attribute_count]"
-                                  . "\" id=\""
-                                  . "$custom_unitID[$attribute_count]"
-                                  . "\"  multiplierToSI=\""
-                                  . "$custom_unitMultiplierToSI[$attribute_count]" . "\">";
-                            }
-                            else {
-                                $custom_unit_stmml =
-                                    "<stmml:unit name=\""
-                                  . "$units[$attribute_count]"
-                                  . "\" unitType=\""
-                                  . "$custom_unitType[$attribute_count]"
-                                  . "\" id=\""
-                                  . "$custom_unitID[$attribute_count]"
-                                  . "\" parentSI=\""
-                                  . "$custom_unitParentSI[$attribute_count]"
-                                  . "\"  multiplierToSI=\""
-                                  . "$custom_unitMultiplierToSI[$attribute_count]" . "\">";
-                            }
-                            $custom_unit_stmml_desc = "<stmml:description>" . "$custom_unitDesc[$attribute_count]" . "</stmml:description>";
-
-                            push( @custom_unit_stmml_tag,      $custom_unit_stmml );
-                            push( @custom_unit_stmml_desc_tag, $custom_unit_stmml_desc );
-                            push( @custom_unit_list,           $units[$attribute_count] );
-                        }
-                        printXMLString( $units[$attribute_count], "customUnit", "7" );
-                    }
-                    else {
-                    }
-
-                    printXMLEndTag( "unit", "6" );
-                    printXMLString( $precision[$attribute_count], "precision", "7" );
-                    printXMLStartTag( "numericDomain", "7" );
-                    printXMLString( $number_type[$attribute_count], "numberType", "8" );
-                    printXMLEndTag( "numericDomain",    "7" );
-                    printXMLEndTag( "ratio",            "5" );
-                    printXMLEndTag( "measurementScale", "4" );
-
-                }
-
                 else {
                 }
 
-                if ( $missing_value_code[$attribute_count] ) {
-                    printXMLStartTag( "missingValueCode", "4" );
-                    printXMLString( $missing_value_code[$attribute_count],        "code",            "5" );
-                    printXMLString( $missing_value_explanation[$attribute_count], "codeExplanation", "5" );
-                    printXMLEndTag( "missingValueCode", "4" );
-                }
-
-                if ( $calculations[$attribute_count] ) {
-                    my $calculations_text = "Calculations: " . $calculations[$attribute_count];
-                    printXMLStartTag( "method",      "4" );
-                    printXMLStartTag( "methodStep",  "5" );
-                    printXMLStartTag( "description", "6" );
-                    printXMLString( $calculations_text, "para", "7" );
-                    printXMLEndTag( "description", "6" );
-                    printXMLEndTag( "methodStep",  "5" );
-                    printXMLEndTag( "method",      "4" );
-                }
-
-                printXMLEndTag( "attribute", "3" );
-                $attribute_num   = $attribute_num + 1;
-                $attribute_count = $attribute_count + 1;
+                printXMLEndTag( "unit", "7" );
+                printXMLString( $precision[$attribute_count], "precision", "8" );
+                printXMLStartTag( "numericDomain", "8" );
+                printXMLString( $number_type[$attribute_count], "numberType", "9" );
+                printXMLEndTag( "numericDomain",    "8" );
+                printXMLEndTag( "ratio",            "6" );
+                printXMLEndTag( "measurementScale", "5" );
 
             }
 
-            printXMLEndTag( "attributeList", "2" );
+            else {
+            }
+
+            if ( $missing_value_code[$attribute_count] ) {
+                printXMLStartTag( "missingValueCode", "5" );
+                printXMLString( $missing_value_code[$attribute_count],        "code",            "6" );
+                printXMLString( $missing_value_explanation[$attribute_count], "codeExplanation", "6" );
+                printXMLEndTag( "missingValueCode", "5" );
+            }
+
+            if ( $calculations[$attribute_count] ) {
+                my $calculations_text = "Calculations: " . $calculations[$attribute_count];
+                printXMLStartTag( "method",      "5" );
+                printXMLStartTag( "methodStep",  "6" );
+                printXMLStartTag( "description", "7" );
+                printXMLString( $calculations_text, "para", "8" );
+                printXMLEndTag( "description", "7" );
+                printXMLEndTag( "methodStep",  "6" );
+                printXMLEndTag( "method",      "5" );
+            }
+
+            printXMLEndTag( "attribute", "4" );
+            $attribute_num   = $attribute_num + 1;
+            $attribute_count = $attribute_count + 1;
+
         }
+
+        printXMLEndTag( "attributeList", "3" );
     }
+
     printXMLString( $num_data_records, "numberOfRecords", "3" );
 
-    printXMLEndTag( "dataTable", "2" );
+    if (   @data_entity_name
+        || @data_entity_desc
+        || $data_object_name
+        || $num_header_lines
+        || $num_data_records
+        || $data_attribute_orientation
+        || $data_field_delimiter
+        || $data_external_format
+        || @attribute_name )
+    {
+        printXMLEndTag( "dataTable", "2" );
+    }
 
     printXMLEndTag( "dataset", "1" );
 
@@ -3286,7 +3331,7 @@ sub createEMLFile {
 # Slightly modified portion of the validate.pl sample distributed with the XML::Xerces module  #
 # Validates the newly created eml file against the schema specified in the EML file.           #
 # Error messages are displayed in the application's log and recorded in an error.log file      #
-# This is the only portion of the file that uses XML::Xerces, IO::Handle, and Getopt::Long;    #
+# This is the only portion of the file that uses XML::Xerces, IO::Handle, and Getopt::Long.    #
 ################################################################################################
 
     if ( $validation_checkbox eq 'yes' ) {
