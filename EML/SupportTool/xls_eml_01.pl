@@ -47,17 +47,49 @@ use Getopt::Long;
 my $mw;
 my @files;
 my $loop;
+my $OS = "$^O";
+my $basefontsize;
+my $fontfamily;
+my $dark_background;
+my $top_padx;
+my $lbin_width;
+my $lbout_width;
 
-$mw = MainWindow->new( -background => '#0C3380' );
+if ( $OS =~ /mswin/i ) {
+    $basefontsize = "10";
+    $fontfamily   = "Arial, Helvetica";
+    $dark_background   = "#0C3380";
+    $top_padx = 0;
+    $lbin_width = 70;
+    $lbout_width = 70;
+}
+elsif ( $OS =~ /darwin/i ) {
+    $basefontsize = "12";
+    $fontfamily   = "helvetica";
+    $dark_background   = "#092866";
+    $top_padx = 35;
+    $lbin_width = 80;
+    $lbout_width = 62;
+}
+else {
+    $basefontsize = "12";
+    $fontfamily   = "helvetica";
+    $dark_background   = "#0C3380";
+    $top_padx = 0;
+    $lbin_width = 70;
+    $lbout_width = 70;
+}
+
+$mw = MainWindow->new( -background => $dark_background );
 $mw->configure( -menu => my $menu = $mw->Menu );
 $mw->title("Excel Metadata to EML");
 
-my $top = $mw->Frame( -background => '#0C3380' )->pack(
+my $top = $mw->Frame( -background => $dark_background )->pack(
     -side => 'top',
     -fill => 'x'
 );
 
-my $top_content = $mw->Frame( -background => '#0C3380' )->pack(
+my $top_content = $mw->Frame( -background => $dark_background )->pack(
     -side => 'top',
     -fill => 'x',
     -padx => 10,
@@ -69,13 +101,15 @@ my $top_text = $top_content->Frame( -background => '#FFFFFF' )->pack(
     -fill  => 'x',
     -ipadx => 5,
     -ipady => 5,
+    -padx  => $top_padx
 );
 
 my $top_entries = $top_content->Frame( -background => '#FFFFFF' )->pack(
     -side  => 'left',
     -fill  => 'x',
     -ipadx => 5,
-    -ipady => 5
+    -ipady => 5,
+    -padx  => $top_padx
 );
 
 my $top_entries1 = $top_entries->Frame( -background => '#FFFFFF' )->pack(
@@ -113,19 +147,19 @@ my $top_entries7 = $top_entries->Frame( -background => '#FFFFFF' )->pack(
     -fill => 'x'
 );
 
-my $bottom = $mw->Frame( -background => '#0C3380' )->pack(
+my $bottom = $mw->Frame( -background => $dark_background )->pack(
     -side => 'bottom',
     -fill => 'x'
 );
 
-my $lb_left = $mw->Frame( -background => '#0C3380' )->pack(
+my $lb_left = $mw->Frame( -background => $dark_background )->pack(
     -side => 'left',
     -fill => 'x',
     -padx => 5,
     -pady => 5
 );
 
-my $lb_left_top = $lb_left->Frame( -background => '#0C3380' )->pack(
+my $lb_left_top = $lb_left->Frame( -background => $dark_background )->pack(
     -side   => 'top',
     -fill   => 'both',
     -expand => 1,
@@ -133,7 +167,7 @@ my $lb_left_top = $lb_left->Frame( -background => '#0C3380' )->pack(
     -pady   => 5
 );
 
-my $lb_right = $mw->Frame( -background => '#0C3380' )->pack(
+my $lb_right = $mw->Frame( -background => $dark_background )->pack(
     -side => 'right',
     -fill => 'x',
     -padx => 5,
@@ -160,7 +194,7 @@ $help_menu->command( -label => "~About this program", -command => \&getInfo );
 my $lb_in = $lb_left->Scrolled(
     "Listbox",
     -scrollbars => "osoe",
-    -width      => "70",
+    -width      => $lbin_width,
     -height     => "20",
     -background => 'white',
     -relief     => 'sunken',
@@ -170,7 +204,7 @@ my $lb_in = $lb_left->Scrolled(
 my $lb_out = $lb_right->Scrolled(
     "Listbox",
     -scrollbars => "osoe",
-    -width      => "70",
+    -width      => $lbout_width,
     -height     => "23",
     -background => 'white',
     -relief     => 'sunken',
@@ -180,24 +214,12 @@ my $lb_out = $lb_right->Scrolled(
 ####################################################################
 #  Label and entry widgets for optional information section  (Tk)  #
 ####################################################################
-my $OS = "$^O";
-my $basefontsize;
-my $fontfamily;
-
-if ( $OS =~ /mswin/i ) {
-    $basefontsize = "10";
-    $fontfamily   = "Arial, Helvetica";
-}
-else {
-    $basefontsize = "12";
-    $fontfamily   = "Arial, Helvetica, Utopia";
-}
 
 $top->Label(
     -font       => [ -size => $basefontsize + 6, -family => $fontfamily, -weight => 'bold' ],
     -text       => 'Excel Metadata to EML - Version 0.1',
     -foreground => '#FFFF99',
-    -background => '#0C3380',
+    -background => $dark_background,
     -anchor     => 'n'
 )->pack( -side => "top" );
 
@@ -309,7 +331,7 @@ $lb_left_top->Label(
     -font       => [ -size => $basefontsize + 2, -family => $fontfamily, -weight => 'bold' ],
     -text       => 'List of Excel Metadata files to convert to EML',
     -foreground => '#FFFF99',
-    -background => '#0C3380',
+    -background => $dark_background,
     -anchor     => 'n'
 )->pack( -side => "top" );
 
@@ -326,7 +348,7 @@ else {
         -font       => [ -size => $basefontsize, -family => $fontfamily, -weight => 'normal' ],
         -text       => 'Destination directory for EML files',
         -foreground => '#FFFF99',
-        -background => '#0C3380',
+        -background => $dark_background,
         -anchor     => 'n'
     )->pack( -side => "left" );
 
@@ -363,7 +385,7 @@ $lb_right->Label(
     -font       => [ -size => $basefontsize + 2, -family => $fontfamily, -weight => 'bold' ],
     -text       => 'Log',
     -foreground => '#FFFF99',
-    -background => '#0C3380',
+    -background => $dark_background,
     -anchor     => 'n'
 )->pack( -side => "left" );
 
@@ -406,7 +428,7 @@ $bottom->Label(
     -font       => [ -size => $basefontsize + 2, -family => $fontfamily, -weight => 'bold' ],
     -text       => '           ',
     -foreground => '#FFFF99',
-    -background => '#0C3380'
+    -background => $dark_background
 )->pack( -side => "right" );
 
 $progress = $bottom->ProgressBar(
@@ -421,10 +443,10 @@ $progress = $bottom->ProgressBar(
 )->pack( -side => "right" );
 
 $bottom->Label(
-    -font       => [ -size => 12, -weight => 'bold' ],
+    -font       => [ -size => $basefontsize + 2, -family => $fontfamily, -weight => 'bold' ],
     -text       => 'Progress ',
     -foreground => '#FFFF99',
-    -background => '#0C3380'
+    -background => $dark_background
 )->pack( -side => "right" );
 
 MainLoop;
@@ -441,6 +463,7 @@ sub perl_ver {
     my $perl         = "$perl_version[0]" . "$perl_version[1]";
     return $perl;
 }
+
 
 # 'Destination directory for EML files'  action
 sub chooseDir {
@@ -1394,7 +1417,7 @@ sub createEMLFile {
     my $data_field_delimiter       = getStringValue( $WkS0->{Cells}[139][2] );
     my $data_external_format       = getStringValue( $WkS0->{Cells}[140][2] );
 
-    my @research_project_number = getArrayValue( $WkS0->{Cells}[145][2] );
+    my @research_project_number = getArrayValueColumns( 145, 2, $WkS0 );
 
     my $attribute_rows_start      = 10;
     my $attribute_rows_end        = 32;
