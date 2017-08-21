@@ -1,9 +1,9 @@
 README 
 
-EXCEL METADATA TO EML - Version 0.2  (updated 11/1/2013)
+EXCEL METADATA TO EML - Version 0.3  (updated 2017 July 20)
 
 The standalone executables and the Perl script described below convert 
-LTER EML Metadata Submission Template files (see xlsx_eml_02.xls) 
+LTER EML Metadata Submission Template files (see xlsx2EML-03_Metadata_Template_FCE.xlsx) 
 to EML 2.1.  The metadata template and this program are based on the 
 EML Best Practices, Version 2 document released in August 2011. 
 
@@ -12,7 +12,7 @@ Georgia Coastal Ecosystems (GCE), and Sevilleta (SEV) Long Term Ecological
 Research (LTER) programs.  Contributors to this program and the Excel metadata template 
 include:
 
-  Linda Powell and Mike Rugge from Florida Coastal Everglades LTER Program 
+  Linda Powell, Kristin Vanderbilt, and Mike Rugge from Florida Coastal Everglades LTER Program 
   (http://fcelter.fiu.edu) at Florida International University.
 
   Wade Sheldon from Georgia Coastal Ecosystems LTER Program 
@@ -35,13 +35,11 @@ include:
   
 DOWNLOAD LOCATIONS
 
-    SVN - https://svn.lternet.edu/websvn/listing.php?repname=FCE&path=/trunk/EML/SupportTool/&#a7832dec0373057bfba77dab17c0d1b08
-      The SVN is hosted by the LTER Network Office and includes the latest version of all of the 
-      files mentioned below except for the executable files. 
+    GitHub - https://github.com/lter/FCE/tree/master/EML/SupportTool
 
     FCE LTER - http://fcelter.fiu.edu/research/information_management/tools/
-      The FCE LTER download location includes links to the Windows and Mac OS X zip files hosted
-      on the LTER Network Office SVN.
+      The FCE LTER download location includes links to the Windows files hosted
+      on GitHub.
 
 
 LICENSE
@@ -53,7 +51,7 @@ LICENSE
 	of the author(s) and do not necessarily reflect the views of the National
 	Science Foundation.
 	
-	Copyright (C) 2004, 2010, 2013  Florida International University
+	Copyright (C) 2004, 2010, 2013, 2017  Florida International University
 	
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -72,60 +70,34 @@ LICENSE
 
 METADATA TEMPLATE
 
-   xlsx2EML-02_Metadata_Template_FCE.xlsx - Metadata template
+   xlsx2EML-03_Metadata_Template_FCE.xlsx - Metadata template
 
     Fill out the information in the five worksheets (General Metadata, MethodsCitation, MethodsProtol,
     ResearchProjects, and DataTable) according to the directions at the top of each worksheet and the 
-    documentation in the found in a Microsoft Word help document called xlsx2EML-02_Metadata_Instructions.doc.  
+    documentation in the found in a Microsoft Word help document called xlsx2EML-03_Metadata_Instructions.doc.  
     All unit definitions come from the 'Units IM Use Only' worksheet.  
     Additional custom units can be added to the bottom of the 'Units IM Use Only' worksheet.  
 
 
 EXECUTABLE FILE
 
-  xlsx2EML-02.exe (Windows) or xlsx2EML-02-MacOSX.dmg (Mac OS X) - Executable file
+  xlsx2EML-03_Windows.exe
 
     Converts the Metadata template above to an EML-compliant XML file.
-    This version doesn't require Perl. 
+    This version doesn't require Perl and has been tested on Windows 7 and Windows 10. 
 
-    The Windows executable was generated on Windows XP from xlsx2EML-02_Tk.pl using Perl 5.14 and the 
-    PAR::Packer 1.014 Perl module (packages all of a script's required Perl components and modules into an 
-    executable file).  The Mac OS X executable was generated on Mac OS X Snow Leopard (10.6.8) from 
-    xlsx2EML-02_Tcl.pl using Citrus Perl 5.16.1 (http://www.citrusperl.com/) and Cava Packager (http://www.cavapackager.com/), 
-    which can create Mac OS X applications from Perl scripts.
+    The executable file was generated from xlsx2EML-02_Tk.pl using Strawberry Perl 5.26 and the 
+    PAR::Packer 1.037 Perl module (packages all of a script's required Perl components and modules into an 
+    executable file).  
 
-    Command used to generate executable:
-      Windows:
-        pp --icon="icon3.ico" -o xlsx2EML-02.exe xlsx2EML-02_Tk.pl
-      Mac OS X:
-        Use Cava Packager to create an application bundle
-	        1. Create a new project
-	        2. Project->Project Details->Project Name: xlsx2EML-02
-	        3. Project->Perl Interpreter: Use Citrus Perl for the Perl Interpreter.  
-	        4. Project->Perl Interpreter: Add perl/lib and perl/site/lib to "Extra Module Search Paths" under Perl Interpreter.
-	        5. Executables: Use xlsx2EML-02_Tcl.pl for the "Packaged Script"
-	        6. Scripts: Use xlsx2EML-02_Tcl.p
-	        7. Force Include Modules: Include the following Perl modules
-					Class::ISA
-					Find::Bin
-					Getopt::Long
-					IO::Handle
-					Spreadsheet::ParseExcel
-					Spreadsheet::XLSX
-					Sub::Name
-					Tcl::pTk
-					XML::LibXML
-					XML::LibXML::Reader
-					deprecate
-	        8. Shared Libraries: libperl.dylib (perl/lib/CORE/libperl.dylib)
-	        9. Scan and build the project
-	        10. The release version (xlsx2EML-02.app) will be in the release directory of the directory specified for the project
-	        11. The installer version (xlsx2EML-02.dmg) will be in the installer directory of the directory specified for the project
-	        
+    Command used to generate executables for Windows:
+      Windows 10:
+	  pp -o xlsx2EML-03_Windows10.exe -l C:/Strawberry/c/bin/libcrypto-1_1-x64__.dll -l C:/Strawberry/c/bin/libiconv-2__.dll -l C:/Strawberry/c/bin/liblzma-5__.dll -l C:/Strawberry/c/bin/libssl-1_1-x64__.dll -l C:/Strawberry/c/bin/libxml2-2__.dll -l C:/Strawberry/c/bin/zlib1__.dll xlsx2EML-03_Tk.pl
+      	        
 
 PERL SCRIPT
 
-    xlsx2EML-02_Tk.pl (Windows) or xlsx2EML-02_Tcl.pl (Mac OS X) - Perl scripts used to create the executables above
+    xlsx2EML-03_Tk.pl (Windows)
 
     Converts the Metadata template above to an EML-compliant XML file.
     Requires:
@@ -141,20 +113,17 @@ PERL SCRIPT
         - IO::Scalar
         - Config
         - Cwd
-        - XML::LibXML::Reader
-		- XML::LibXML
+        - XML::LibXML
         - IO::Handle
         - Getopt::Long
-
-    Platform-specific requirements:
-      Windows (xlsx2EML-02_Tk.pl):
-        - Tk
+        - Digest::MD5::File qw(url_md5 url_md5_hex -utf8);
+	    - LWP::UserAgent;
+	    - LWP::Protocol::https;
+	    - IO::Socket::SSL;
+        - HTTP::Request;      
+		- Tk
         - Tk::ProgressBar
 
-      Mac OS X (xlsx2EML-02_Tcl.pl):
-        - Tcl::pTk (qw/ :perlTk/)
-        - Tcl::pTk::ProgressBar
-        - Tcl::pTk::Tile
 
     Change the shebang (first line of the script) to point to the location of your Perl installation.
     
@@ -187,8 +156,8 @@ NOTES
 
 INSTRUCTIONS
 
-    1. Fill out the LTER EML Metadata Template (xlsx2EML-02_Metadata_Template_FCE.xlsx).  
-    Instructions for filling out the template are provided in a Microsoft Word help document called xlsx2EML-02_Metadata_Instructions.doc.
+    1. Fill out the LTER EML Metadata Template (xlsx2EML-03_Metadata_Template_FCE.xlsx).  
+    Instructions for filling out the template are provided in a Microsoft Word help document called xlsx2EML-03_Metadata_Instructions.doc.
 
     2. Add the template files to the list of files to convert to EML with the 'Add file to the list' button.  
     You can also use the 'Add file' in the file menu to add files to the list.  The other buttons and 
@@ -236,8 +205,8 @@ FEEDBACK, BUG REPORTS
 
     Thank you
 
-    Linda Powell                           Mike Rugge
-    powell@fiu.edu                         ruggem@fiu.edu
+    Kristin Vanderbilt                     Mike Rugge
+    krvander@fiu.edu                       ruggem@fiu.edu
     FCE LTER Information Manager           FCE LTER Program Manager
 
     
