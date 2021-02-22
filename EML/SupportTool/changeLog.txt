@@ -127,7 +127,7 @@
     5) Using Cava Packager and Citrus Perl to create Mac OS X application from the Perl script and required libraries.
 
 
-8/21/2017 Mike Rugge, FCE - Created version 0.3 of the perl script
+7/12/2017 Mike Rugge, FCE - Created version 0.3 of the perl script
 
     1) Added a row for the Dataset Creator ORCID (EML tag <dataset><creator><userId directory="http://orcid.org"></userId>) 
     in the metadata template.  Modified the perl script to use the ORCID API to search for ORCIDs for creators or use the 
@@ -144,6 +144,25 @@
     3) Replaced the taxonCommon tag with the correct commonName tag in the perl script.
     (EML tag <dataset><coverage><taxonomicCoverage><taxonomicClassification><commonName><commonName>)
     
-    4) The perl script is using XML::LibXML::Schema to validate the EML document against the schema instead of XML::LibXML::Reader.
-    
-    5) Added support for adding keywords from the LTER Controlled Vocabulary
+    4) The perl script is using XML::LibXML::Schema to validate the EML document against the schema instead of XML::LibXML::Reader
+
+10/11/2019 Mike Rugge, FCE - Created version 0.3.1 of the perl script
+
+    1) Corrected orcid.org URLs by replacing orchid.org with orcid.org
+	
+    2) Changed the default schema locations to https://fcelter.fiu.edu/data/eml_schema/eml-2.1.0/eml.xsd and
+    https://fcelter.fiu.edu/data/eml_schema/eml-2.1.0/stmml.xsd
+	
+    3) Since schema URL is https instead of http, LWP::UserAgent will retrieve the schema as a string and 
+    XML::LibXML::Schema (which can't process https) gets the schema from the string instead of a URL.
+
+02/12/2021 Mike Rugge, FCE - Created version 0.4 of the perl script
+
+    Made some changes to make the template and script compatible with EML 2.2.0
+    1) Added support for awards
+    2) Added support for attribute annotations    
+    3) Added support for dataset annotations
+    4) Corrected default schema locations to https://eml.ecoinformatics.org/eml-2.2.0
+    5) The validation box is unchecked by default.
+
+    Kristin Vanderbilt made changes to the template, and Mike Rugge made changes to the Perl script.
