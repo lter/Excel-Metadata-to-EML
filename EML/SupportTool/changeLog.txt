@@ -156,7 +156,7 @@
     3) Since schema URL is https instead of http, LWP::UserAgent will retrieve the schema as a string and 
     XML::LibXML::Schema (which can't process https) gets the schema from the string instead of a URL.
 
-02/12/2021 Mike Rugge, FCE - Created version 0.4 of the perl script
+02/22/2021 Mike Rugge, FCE - Created version 0.4 of the perl script
 
     Made some changes to make the template and script compatible with EML 2.2.0
     1) Added support for awards
