@@ -1,6 +1,6 @@
 README 
 
-EXCEL METADATA TO EML - Version 0.4  (updated 2021 February 22)
+EXCEL METADATA TO EML - Version 0.4  (updated 2021 December 1)
 
 The standalone executables and the Perl script described below convert 
 LTER EML Metadata Submission Template files (see xlsx2EML-04_Metadata_Template_FCE.xlsx) 
