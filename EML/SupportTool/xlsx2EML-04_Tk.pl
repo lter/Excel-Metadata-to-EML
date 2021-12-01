@@ -3298,16 +3298,17 @@ sub createEMLFile {
         printXMLString( $data_object_name, "objectName", "4" );
         printXMLString( $data_object_size, "size", "4", $data_object_size_unit, "unit" );
         if ($dataset_datatable_download_url){
-        	if (url_md5_hex($dataset_datatable_download_url)){
-			    my $digest = url_md5_hex($dataset_datatable_download_url);
-			    printXMLString( $digest, "authentication", "4", "MD5", "method" );		    
-			}
-		    else {
-			    $lb_out->insert( "end", "  " );
-	            $lb_out->insert( "end", "PLEASE NOTE: Unable to create MD5 checksum using the URL for the data file." );
-				$lb_out->insert( "end", "Please verity that the Dataset Download URL works." );				
-		    }
-        }
+			my $md5 = Digest::MD5->new;
+			$md5->addurl($dataset_datatable_download_url);
+			my $digest = $md5->hexdigest;
+			printXMLString( $digest, "authentication", "4", "MD5", "method" );						
+		}
+		else {
+			$lb_out->insert( "end", "  " );
+			$lb_out->insert( "end", "PLEASE NOTE: Unable to create MD5 checksum using the URL for the data file." );
+			$lb_out->insert( "end", "Please verity that the Dataset Download URL works." );				
+		}
+        
         printXMLString( $data_object_char_encoding, "characterEncoding", "4" );
 
         if ( $num_header_lines
