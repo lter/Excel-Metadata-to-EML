@@ -166,3 +166,6 @@
     5) The validation box is unchecked by default.
 
     Kristin Vanderbilt made changes to the template, and Mike Rugge made changes to the Perl script.
+
+12/01/2021 Mike Rugge, FCE - Fixed MD5 generation
+	Fixed the generation of MD5 from the dataset download URL in the Perl program using object-oriented commands from the Digest::MD5:File Perl module
