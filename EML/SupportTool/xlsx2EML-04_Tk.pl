@@ -27,7 +27,7 @@ use Tk::Scale;
 use Tk::Scrollbar;
 use Tk::Spinbox;
 use Tk::Text;
-use Digest::MD5::File qw(url_md5_hex);
+use Digest::MD5 qw(md5 md5_hex);
 use LWP::UserAgent;
 use LWP::Protocol::https;
 use IO::Socket::SSL;
@@ -136,7 +136,7 @@ else {
 $mw = MainWindow->new( -background => $dark_background );
 $mw->configure( -menu => my $menu = $mw->Menu );
 $mw->title("Excel Metadata to EML");
-$mw->setPalette(background=>'#FFFFFF'); 
+$mw->setPalette(background=>'#FFFFFF');
 
 my $main_container = $mw->Frame( -background => $dark_background )->pack(
     -side => 'top',
@@ -154,7 +154,7 @@ my $top_content = $main_container->Frame( -background => $border )->pack(
     -side => 'top',
     -fill => 'y',
     -pady => 1,
-    
+
 );
 
 my $top_text = $top_content->Frame( -background => '#FFFFFF')->pack(
@@ -169,11 +169,11 @@ my $top_text = $top_content->Frame( -background => '#FFFFFF')->pack(
 my $top_entries = $top_content->Frame( -background => '#FFFFFF' )->pack(
     -side  => 'left',
     -fill  => 'both',
-    -anchor => 'e',    
+    -anchor => 'e',
     -padx => 2,
     -pady => 2,
     -ipadx => 5
-    
+
 );
 
 my $top_spacer = $top_content->Frame( -background => $dark_background )->pack(
@@ -619,7 +619,7 @@ sub getFile {
     my $types = [ [ "Excel Metadata template", '.xls*' ], [ "Excel Metadata template", '.xlsx' ], [ "All Files", "*" ] ];
 
     if ( &perl_ver >= 58 ) {
-        @file = $mw->getOpenFile( -filetypes => $types, -multiple => $mult );        
+        @file = $mw->getOpenFile( -filetypes => $types, -multiple => $mult );
     }
     else {
         @file = $mw->getOpenFile( -filetypes => $types );
@@ -683,39 +683,39 @@ sub getInfo {
         -text       => qq(
 Excel Metadata to EML - Version 0.4
 
-The Excel Metadata to EML program converts LTER EML Metadata Submission Template files 
-(in Excel format) to EML 2.2.0 files.  
+The Excel Metadata to EML program converts LTER EML Metadata Submission Template files
+(in Excel format) to EML 2.2.0 files.
 
-This program was developed with support from the Florida Coastal Everglades (FCE), 
-Georgia Coastal Ecosystems (GCE), and Sevilleta (SEV) Long Term Ecological 
-Research (LTER) programs.  Contributors to this program and the Excel metadata template 
+This program was developed with support from the Florida Coastal Everglades (FCE),
+Georgia Coastal Ecosystems (GCE), and Sevilleta (SEV) Long Term Ecological
+Research (LTER) programs.  Contributors to this program and the Excel metadata template
 include:
 
-  Linda Powell, Mike Rugge, and Kristin Vanderbilt from Florida Coastal Everglades LTER Program 
+  Linda Powell, Mike Rugge, and Kristin Vanderbilt from Florida Coastal Everglades LTER Program
   (http://fcelter.fiu.edu) at Florida International University.
 
-  Wade Sheldon from Georgia Coastal Ecosystems LTER Program 
+  Wade Sheldon from Georgia Coastal Ecosystems LTER Program
   (http://gce-lter.marsci.uga.edu/lter/) at the University of Georgia.
 
-  Kristin Vanderbilt from the Sevilleta Long-Term Ecological Research LTER Program 
+  Kristin Vanderbilt from the Sevilleta Long-Term Ecological Research LTER Program
   (http://sevilleta.unm.edu) at the University of New Mexico.
 
-  Youngmi Kim and Travis Brooks, programmers for the Canopy Database Project and graduates 
+  Youngmi Kim and Travis Brooks, programmers for the Canopy Database Project and graduates
   of The Evergreen State College Software Engineering Program (http://canopy.evergreen.edu/).
 
-  Judy Bayard Cushing, Ph.D., a member of the Faculty (Computer Science), The Evergreen State College, 
-  Olympia, Washington and a principal investigator of the Canopy Database Project 
+  Judy Bayard Cushing, Ph.D., a member of the Faculty (Computer Science), The Evergreen State College,
+  Olympia, Washington and a principal investigator of the Canopy Database Project
   (http://academic.evergreen.edu/j/judyc/home.htm, http://canopy.evergreen.edu/).
 
-  Working in cooperation with the Evergreen State College contributors are Professor Barbara Bond, 
-  Department of Forest Science, Oregon State University and her students, Georgianne Moore, 
+  Working in cooperation with the Evergreen State College contributors are Professor Barbara Bond,
+  Department of Forest Science, Oregon State University and her students, Georgianne Moore,
   Texas A&M University and Kate George, USDA.
 
-This material is based upon work supported by National Science Foundation 
-through the Florida Coastal Everglades Long-Term Ecological Research program 
-under Cooperative Agreements #DEB-1237517, #DBI-0620409, and #DEB-9910514. Any opinions, 
-findings, conclusions, or recommendations expressed in the material are those 
-of the author(s) and do not necessarily reflect the views of the National 
+This material is based upon work supported by National Science Foundation
+through the Florida Coastal Everglades Long-Term Ecological Research program
+under Cooperative Agreements #DEB-1237517, #DBI-0620409, and #DEB-9910514. Any opinions,
+findings, conclusions, or recommendations expressed in the material are those
+of the author(s) and do not necessarily reflect the views of the National
 Science Foundation.
 
 Copyright (C) 2004, 2010, 2013, 2017, 2021  Florida International University
@@ -756,50 +756,50 @@ sub getInstructions {
 Excel Metadata to EML - Version 0.4
 
 This program converts LTER Excel Metadata Templates to Ecological Metadata Language (EML) 2.2.0 files.  The metadata template and
-this program are based on the EML best practices document released in 2011.  
+this program are based on the EML best practices document released in 2011.
 
 INSTRUCTIONS
 
-    1. Fill out the LTER EML Metadata Template (xlsx2EML-03_Metadata_Template_FCE.xlsx).  
+    1. Fill out the LTER EML Metadata Template (xlsx2EML-03_Metadata_Template_FCE.xlsx).
     Instructions for filling out the template are provided in a Microsoft Word help document called xlsx2EML-03_Metadata_Instructions.doc.
 
-    2. Add the template files to the list of files to convert to EML with the 'Add file to the list' button.  
-    You can also use the 'Add file' in the file menu to add files to the list.  The other buttons and 
+    2. Add the template files to the list of files to convert to EML with the 'Add file to the list' button.
+    You can also use the 'Add file' in the file menu to add files to the list.  The other buttons and
     choices in the file menu let you remove files, clear the log to the left, and exit the program.
 
-    3. Fill out the Optional Conversion Information section.  
+    3. Fill out the Optional Conversion Information section.
      Indentation
-       The number of spaces per indent is optional.  If you leave this field blank, it defaults to two spaces 
-       per indent. 
+       The number of spaces per indent is optional.  If you leave this field blank, it defaults to two spaces
+       per indent.
 
      EML Schema and STMML Schema
-       The EML and STMML Schema URLs or file paths are optional and will default to eml.xsd and stmml.xsd, respectively.  
-       However, in order to validate the final EML document, URLs or file paths that point to 
-       the eml.xsd and stmml.xsd must be included (i.e. http://ltersite.edu/eml.xsd or C:\\eml\\eml.xsd). 
-       EML schema validation is performed using the specified schemas after each EML file is created.  
-       The stmml.xsd is only required if custom units are included in DataTable worksheet of the metadata template. 
+       The EML and STMML Schema URLs or file paths are optional and will default to eml.xsd and stmml.xsd, respectively.
+       However, in order to validate the final EML document, URLs or file paths that point to
+       the eml.xsd and stmml.xsd must be included (i.e. http://ltersite.edu/eml.xsd or C:\\eml\\eml.xsd).
+       EML schema validation is performed using the specified schemas after each EML file is created.
+       The stmml.xsd is only required if custom units are included in DataTable worksheet of the metadata template.
 
      XSL Stylesheet
-       The XSL Stylesheet URL is also optional and won't be included in the final EML files unless the URL is entered.  
+       The XSL Stylesheet URL is also optional and won't be included in the final EML files unless the URL is entered.
 
      Embedded Data
-       You can choose to embed data in the EML document by checking the box at the bottom of this section.  
+       You can choose to embed data in the EML document by checking the box at the bottom of this section.
        Please note that EML 2.2.0 or higher is required to validate EML files with embedded data.
 
-     Validation 
-       Validation against the specified EML schema (the EML and STMML Schema URLs or file paths) is optional, but 
+     Validation
+       Validation against the specified EML schema (the EML and STMML Schema URLs or file paths) is optional, but
        checked (enabled) by default. Validation warnings and errors will be displayed in the program's log and
-       recorded in an error log file (error.log). 
-    
-    4. Select a destination directory for EML files.  
-    If this field is blank, all EML files will be saved in the same directory as their source Excel file.  
+       recorded in an error log file (error.log).
 
-    5. Click on the 'Convert all file to EML' button or select 'Convert to EML' from the file menu 
+    4. Select a destination directory for EML files.
+    If this field is blank, all EML files will be saved in the same directory as their source Excel file.
+
+    5. Click on the 'Convert all file to EML' button or select 'Convert to EML' from the file menu
     to convert all files in the list to EML.  The log on the right displays messages if a file is successfully
-    converted to EML (with the path to the new EML file), if a file isn't converted to EML, and if the file 
-    has EML schema validation warnings or errors.  Validation warnings and errors are also recorded in an 
-    error log file (error.log). Files in the list which don't have xls or xlsx extensions or the value 'Dataset Title' 
-    in cell B20 will not be converted to EML.  Click on the 'Stop converting files' button or select 
+    converted to EML (with the path to the new EML file), if a file isn't converted to EML, and if the file
+    has EML schema validation warnings or errors.  Validation warnings and errors are also recorded in an
+    error log file (error.log). Files in the list which don't have xls or xlsx extensions or the value 'Dataset Title'
+    in cell B20 will not be converted to EML.  Click on the 'Stop converting files' button or select
     'Stop converting files' from the file menu if you wish to stop the conversion process.
 
 )
@@ -826,10 +826,10 @@ Excel Metadata to EML - Version 0.4
 
 NOTES
 
-    - EML files will retain the same name as the Excel files, but their file extension will be 'xml' instead of 'xls' or 'xlsx'. 
+    - EML files will retain the same name as the Excel files, but their file extension will be 'xml' instead of 'xls' or 'xlsx'.
 
-    - The program will embed data entered in the Values section of the DataTable worksheet into the EML file if the 
-    'Embed data' box is checked.  If no values are entered in this section, no data will be embedded in the EML. 
+    - The program will embed data entered in the Values section of the DataTable worksheet into the EML file if the
+    'Embed data' box is checked.  If no values are entered in this section, no data will be embedded in the EML.
     If you plan to embed data, please use EML 2.1.0 or higher.
 
     - Some or all buttons may not be visible if your screen resolution is less than 1024 X 768.  If buttons aren't
@@ -840,10 +840,10 @@ NOTES
 
        Tips for best performance:
 
-       - Validate against local schema or deselect the validation option.  Validation against a schema URL can take 
+       - Validate against local schema or deselect the validation option.  Validation against a schema URL can take
        awhile if you have a slow network connection.
 
-       - Keep the size of the Excel Metadata Template files as small as possible.  For example, if you don't have 
+       - Keep the size of the Excel Metadata Template files as small as possible.  For example, if you don't have
        any methods citations, you could clear all of the cells in the methodsCitation sheet to reduce the size of the file.
        Please note that every worksheet needs to be present in the specified order for the program to work, though.
 
@@ -1126,7 +1126,7 @@ sub createEMLFile {
         return $files_done;
     }
 
-    # Subroutine to replace &, <, >, µ with entities
+    # Subroutine to replace &, <, >, ï¿½ with entities
     # I'm not sure if this is necessary or a good idea
     sub IllegalChars_Array {
         my $value;
@@ -1135,8 +1135,8 @@ sub createEMLFile {
             #$value =~ s/&amp\;amp\;/&amp\;/g;
             $value =~ s/>/&gt\;/g;
             $value =~ s/</&lt\;/g;
-            #$value =~ s/µ/&#181;/g;
-            
+            #$value =~ s/ï¿½/&#181;/g;
+
         }
     }
 
@@ -1149,20 +1149,20 @@ sub createEMLFile {
 
         if ( $_[0] ) {
             my $value;
-            
+
             if ($_[0]->type eq 'Date'){
-              	$value = $_[0]->unformatted;	
+              	$value = $_[0]->unformatted;
               	$value = ExcelFmt('yyyy-mm-dd', $value);
             }
             else {
             	$value = $_[0]->Value;
-            }            
+            }
 
             #$value =~ s/&/&amp\;/g;
             $value =~ s/&amp\;amp\;/&amp\;/g;
             $value =~ s/>/&gt\;/g;
             $value =~ s/</&lt\;/g;
-            $value =~ s/µ/&#181;/g;
+            $value =~ s/ï¿½/&#181;/g;
 
             return $value;
         }
@@ -1196,15 +1196,15 @@ sub createEMLFile {
 
             $value_test = $WkS->{Cells}[$row][$column];
             if ($value_test) {
-                
+
                 if ($WkS->{Cells}[$row][$column]->type eq 'Date'){
-                	$value = $WkS->{Cells}[$row][$column]->unformatted;	
+                	$value = $WkS->{Cells}[$row][$column]->unformatted;
                 	$value = ExcelFmt('yyyy-mm-dd', $value);
                 }
                 else {
                 	$value = $WkS->{Cells}[$row][$column]->Value;
                 }
-                
+
                 if ( $value gt '' ) {
                     push( @value, $value );
                 }
@@ -1272,16 +1272,16 @@ sub createEMLFile {
 
         while ( $count <= $count_finished ) {
             if ( $worksheet->{Cells}[ $_[1] ][$count] ) {
-                
+
                 if ($worksheet->{Cells}[ $_[1] ][$count]->type eq 'Date'){
-                	$value = $worksheet->{Cells}[ $_[1] ][$count]->unformatted;	
+                	$value = $worksheet->{Cells}[ $_[1] ][$count]->unformatted;
                 	$value = ExcelFmt('yyyy-mm-dd', $value);
                 	push( @value, $value);
                 }
                 else {
                 	push( @value, $worksheet->{Cells}[ $_[1] ][$count]->Value );
                 }
-                
+
             }
             else {
                 push( @value, "" );
@@ -1610,16 +1610,16 @@ sub createEMLFile {
     my @dataset_maintenance_change_scope = getGroupedColumns( $dataset_maintenance_change_columns, 133, $WkS0, 2 );  #NEW
     my @dataset_maintenance_change_old_value = getGroupedColumns( $dataset_maintenance_change_columns, 134, $WkS0, 2 );  #NEW
     my @dataset_maintenance_change_date = getGroupedColumns( $dataset_maintenance_change_columns, 135, $WkS0, 2 );
-	
+
 	# NEW 0.4 - Dataset  annotation
 	my $dataset_annotation_rows_start = 16;
     my $dataset_annotation_rows_end = 19;
     my $dataset_annotation_column_start = 1;
     my $dataset_annotation_columns = getNumGroupColumns( $dataset_annotation_rows_start, $dataset_annotation_rows_end, 1, $WkS5 );
     my @dataset_annotation_propertyURI_label = getGroupedColumns( $dataset_annotation_columns, 16, $WkS5, 1 );
-	my @dataset_annotation_propertyURI = getGroupedColumns( $dataset_annotation_columns, 17, $WkS5, 1 );  
-	my @dataset_annotation_valueURI_label = getGroupedColumns( $dataset_annotation_columns, 18, $WkS5, 1 );  
-	my @dataset_annotation_valueURI = getGroupedColumns( $dataset_annotation_columns, 19, $WkS5, 1 );  
+	my @dataset_annotation_propertyURI = getGroupedColumns( $dataset_annotation_columns, 17, $WkS5, 1 );
+	my @dataset_annotation_valueURI_label = getGroupedColumns( $dataset_annotation_columns, 18, $WkS5, 1 );
+	my @dataset_annotation_valueURI = getGroupedColumns( $dataset_annotation_columns, 19, $WkS5, 1 );
 	# END NEW 0.4 - Dataset  annotation
 
     ############
@@ -1638,7 +1638,7 @@ sub createEMLFile {
     my $data_record_delimiter      = getStringValue( $WkS0->{Cells}[148][2] );  #NEW
     my $data_field_delimiter       = getStringValue( $WkS0->{Cells}[149][2] );
     my $data_external_format       = getStringValue( $WkS0->{Cells}[150][2] );
-    
+
     my $dataset_datatable_download_url = getStringValue( $WkS0->{Cells}[151][2] );  #NEW
     my $dataset_datatable_download_url_function = getStringValue( $WkS0->{Cells}[152][2] );  #NEW
     my $dataset_datatable_access_authentication_info = getStringValue( $WkS0->{Cells}[153][2] );  #NEW
@@ -1677,7 +1677,7 @@ sub createEMLFile {
     my @custom_unit_list;
     my @custom_unit_stmml_tag;
     my @custom_unit_stmml_desc_tag;
-	
+
 	# NEW - 0.4 ATTRIBUTE ANNOTATION#
 	my $attribute_annotation_rows_start   = 1;
     my $attribute_annotation_rows_end     = 7;
@@ -1685,11 +1685,11 @@ sub createEMLFile {
     my $attribute_annotation_columns = $attribute_columns;
 	my @attribute_annotation_name = getGroupedColumns( $attribute_annotation_columns, 1, $WkS5, 1 );
 	my @attribute_annotation_propertyURI_label = getGroupedColumns( $attribute_annotation_columns, 4, $WkS5, 1 );
-	my @attribute_annotation_propertyURI = getGroupedColumns( $attribute_annotation_columns, 5, $WkS5, 1 );  
-	my @attribute_annotation_valueURI_label = getGroupedColumns( $attribute_annotation_columns, 6, $WkS5, 1 );  
-	my @attribute_annotation_valueURI = getGroupedColumns( $attribute_annotation_columns, 7, $WkS5, 1 );  
+	my @attribute_annotation_propertyURI = getGroupedColumns( $attribute_annotation_columns, 5, $WkS5, 1 );
+	my @attribute_annotation_valueURI_label = getGroupedColumns( $attribute_annotation_columns, 6, $WkS5, 1 );
+	my @attribute_annotation_valueURI = getGroupedColumns( $attribute_annotation_columns, 7, $WkS5, 1 );
 	# END NEW - 0.4 #
-	
+
     my @embedded_data;
     my $embedded_data_test = getStringValue( $WkS4->{Cells}[33][1] );
 
@@ -1722,12 +1722,12 @@ sub createEMLFile {
     ###############################
 
     print XML "<?xml version=\"1.0\" encoding=\"UTF\-8\"?>\n";
-    
+
     if ($stylesheet) {
         print XML "<?xml-stylesheet href=\"$stylesheet\" type=\"text/xsl\"?>\n";
     }
     print XML "<eml:eml packageId=\"$metacat_pkg_id\"\n system=\"https://pasta.edirepository.org\" \n xmlns:d1v1=\"NULL\" \n xmlns:eml=\"https://eml.ecoinformatics.org/eml-2.2.0\" \n xmlns:stmml=\"http://www.xml-cml.org/schema/stmml-1.2\" \n xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"https://eml.ecoinformatics.org/eml-2.2.0 https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd\">\n";
-    
+
     ########################
     # Print ACCESS SECTION #
     ########################
@@ -1753,13 +1753,13 @@ sub createEMLFile {
             if ( @dataset_principal_permission_info && @dataset_principal_access_info ) {
 
                 printXMLStartTag( "allow", "3" );
-                
+
 				my $dataset_principal_access_info = $dataset_principal_access_info[$access];
 				$dataset_principal_access_info =~ s/\s//g;
 				my $dataset_principal_permission_info = $dataset_principal_permission_info[$access];
 				$dataset_principal_permission_info = lc($dataset_principal_permission_info);
 				$dataset_principal_permission_info =~ s/\s//g;
-				
+
                 printXMLString( $dataset_principal_access_info, "principal", "4" );
                 printXMLString( $dataset_principal_permission_info, "permission", "4" );
 
@@ -1771,8 +1771,8 @@ sub createEMLFile {
         printXMLEndTag( "access", "2" );
 
     }
-    
-    
+
+
 
     printXMLStartTag( "dataset", "1", $DatasetID );
     printXMLString( $DatasetID, "alternateIdentifier", "2" );
@@ -1797,7 +1797,7 @@ sub createEMLFile {
             printXMLString( $creator_firstname[$creator],  "givenName",  "4" );
             printXMLString( $creator_lastname[$creator],   "surName",    "4" );
             printXMLEndTag( "individualName", "3" );
-            
+
             # Search for ORCID using API, returns XML
             my $user_agent = LWP::UserAgent->new;
             my $creator_orcid_url = "https://pub.orcid.org/v2.0/search?q=family-name:".$creator_lastname[$creator]." AND given-names:".$creator_firstname[$creator];
@@ -1805,7 +1805,7 @@ sub createEMLFile {
             $orcid_req->content_type('application/vnd.orcid+xml');
             my $orcid_res = $user_agent->request($orcid_req);
             $orcid_res_content = $orcid_res->content();
-            
+
 		   }
 
         if ( $creator_organization[$creator] ) {
@@ -1838,9 +1838,9 @@ sub createEMLFile {
         printXMLString( $creator_fax[$creator], "phone", "3", "fax", "phonetype" );
         printXMLString( $creator_email[$creator], "electronicMailAddress", "3" );
         printXMLString( $creator_url[$creator], "onlineUrl", "3" );
-        
+
         # Looks at XML from ORCID API.  Finds number of records and retrieves ORCID, if available.
-        
+
         if ($creator_firstname[$creator] && $creator_lastname[$creator]) {
         my $orcid_dom = XML::LibXML->load_xml(string=>$orcid_res_content);
 		my $orcid_count = 0;
@@ -1849,13 +1849,13 @@ sub createEMLFile {
 		my $num_orcid_records;
 		my $orcid;
 		my $orcid_url;
-		
+
 		foreach my $orcid_xml ($orcid_dom->findnodes('/search:search'))  {
-			
+
 			$num_orcid_records = $orcid_xml->getAttribute('num-found');
-			
+
 			if ($num_orcid_records == 0) {
-				
+
 				if ($creator_orcid[$creator]){
 					$orcid_url = "https://orcid.org/".$creator_orcid[$creator];
 					printXMLString( $orcid_url, "userId", "3", "https://orcid.org", "directory");
@@ -1870,7 +1870,7 @@ sub createEMLFile {
 			}
 			elsif ($num_orcid_records == 1) {
 				$orcid = $orcid_dom->findnodes('/search:search/search:result/common:orcid-identifier/common:path');
-				
+
 				if ($creator_orcid[$creator] eq $orcid){
 					$orcid_url = "https://orcid.org/".$orcid;
 					printXMLString( $orcid_url, "userId", "3", "https://orcid.org", "directory");
@@ -1899,7 +1899,7 @@ sub createEMLFile {
 					$lb_out->insert( "end", "     Including $creator_firstname[$creator] $creator_lastname[$creator]'s ORCID in the EML file." );
 					$lb_out->insert( "end", "  " );
 				}
-				
+
 			}
 			elsif ($num_orcid_records >1) {
 				if ($creator_orcid[$creator]){
@@ -1913,9 +1913,9 @@ sub createEMLFile {
 					$lb_out->insert( "end", "     More than one possible ORCID found online for $creator_firstname[$creator] $creator_lastname[$creator] and no ORCID specified in the spreadsheet." );
 					$lb_out->insert( "end", "  " );
 				}
-				
+
 			}
-		
+
 		  }
 	}
         printXMLEndTag( "creator", "2" );
@@ -2054,7 +2054,7 @@ sub createEMLFile {
         }
         printXMLEndTag( "keywordSet", "2" );
     }
-    
+
     if (@dataset_keywords2) {
         printXMLStartTag( "keywordSet", "2" );
         my $keyword2 = 0;
@@ -2094,17 +2094,17 @@ sub createEMLFile {
     ############
     percentDone;
     ############
-    
+
     if ($dataset_download_url) {
 	    printXMLStartTag( "distribution", "2" );
-	    
+
         printXMLStartTag( "online", "3" );
         printXMLString( $dataset_download_url, "url", "4" ); # MODIFIED
         printXMLEndTag( "online", "3" );
-        
+
         printXMLEndTag( "distribution", "2" );
 	}
-    
+
 
     ##########################
     # Print COVERAGE SECTION #
@@ -2194,29 +2194,29 @@ sub createEMLFile {
 
         printXMLEndTag( "coverage", "2" );
     }
-	
+
 	##############################################
     # Print DATASET ANNOTATION SECTION - NEW 0.4 #
     ##############################################
-	
+
 	my $annotation = 0;
 
 	if (@dataset_annotation_valueURI
-		&& @dataset_annotation_propertyURI 
-		&& @dataset_annotation_propertyURI_label 
+		&& @dataset_annotation_propertyURI
+		&& @dataset_annotation_propertyURI_label
 		&& @dataset_annotation_valueURI_label) {
-		
+
 		while ( $annotation <= ( $dataset_annotation_columns - $dataset_annotation_column_start ) ) {
 
 			printXMLStartTag( "annotation", "2" );
 			printXMLString( $dataset_annotation_propertyURI[$annotation], "propertyURI", "3", $dataset_annotation_propertyURI_label[$annotation], "label" );
-			printXMLString( $dataset_annotation_valueURI[$annotation], "valueURI", "3", $dataset_annotation_valueURI_label[$annotation] , "label" ); 
+			printXMLString( $dataset_annotation_valueURI[$annotation], "valueURI", "3", $dataset_annotation_valueURI_label[$annotation] , "label" );
 			printXMLEndTag( "annotation", "2" );
 
 			$annotation = $annotation + 1;
 		}
 	}
-	
+
     #####################################
     # Print DATASET MAINTENANCE SECTION #
     #####################################
@@ -2232,28 +2232,28 @@ sub createEMLFile {
             printXMLEndTag( "description", "3" );
             $maintenance = $maintenance + 1;
         }
-        
-        if (@dataset_maintenance_change_scope || @dataset_maintenance_change_old_value || @dataset_maintenance_change_date) {	        
-	        
+
+        if (@dataset_maintenance_change_scope || @dataset_maintenance_change_old_value || @dataset_maintenance_change_date) {
+
 	        my @mainthist_array_length = ($#dataset_maintenance_change_scope,$#dataset_maintenance_change_old_value,$#dataset_maintenance_change_date);
 	        my $mainthist_a;
 	        my $mainthist_b;
 	        my @mainthist_max_length = sort { $mainthist_b <=> $mainthist_a } @mainthist_array_length;
 	        my $maintenance_history = 0;
-	        
+
 	        while ( $maintenance_history <= $#mainthist_max_length && $dataset_maintenance_change_scope[$maintenance_history]) {
-	        	
+
 	            printXMLStartTag( "changeHistory", "3" );
 	            printXMLString( $dataset_maintenance_change_scope[$maintenance_history], "changeScope", "4" );
 		        printXMLString( $dataset_maintenance_change_old_value[$maintenance_history], "oldValue", "4" );
 				printXMLString( $dataset_maintenance_change_date[$maintenance_history], "changeDate", "4" );
 	            $maintenance_history = $maintenance_history + 1;
 	            printXMLEndTag( "changeHistory", "3" );
-	            
+
 	        }
-	        
+
         }
-                
+
         printXMLEndTag( "maintenance", "2" );
     }
 
@@ -2985,7 +2985,7 @@ sub createEMLFile {
             my $project_start_row21 = $project_start_row + 21;
             my $project_start_row22 = $project_start_row + 22;
             my $project_start_row23 = $project_start_row + 23;
-			
+
 			# NEW 0.4 #
 			my $project_award_start_row0 = ($project_count * 8) + 0;
 			my $project_award_start_row1 = ($project_count * 8) + 1;
@@ -3034,13 +3034,13 @@ sub createEMLFile {
             my @research_project_temporal_coverage = getArrayValue( $WkS3->{Cells}[$project_start_row21][2] );
             my @research_project_abstract = getArrayValueColumns( $project_start_row22, 2, $WkS3 );
             my @research_project_funding = getArrayValue( $WkS3->{Cells}[$project_start_row23][2] );
-			
+
 			# NEW 0.4 #
 			my $research_awards_rows_start   = $project_award_start_row1;
             my $research_awards_rows_end     = $project_award_start_row5;
             my $research_awards_column_start = 1;
             my $research_awards_columns = getNumGroupColumns( $research_awards_rows_start, $research_awards_rows_end, 1, $WkS6 );
-            
+
 			my $research_awards_project_number = getStringValue( $WkS6->{Cells}[$project_award_start_row0][1] );
 			my @research_awards_funder_name = getGroupedColumns( $research_awards_columns, $project_award_start_row1, $WkS6, 1 );
 			my @research_awards_funder_identifier = getGroupedColumns( $research_awards_columns, $project_award_start_row2, $WkS6, 1 );
@@ -3146,23 +3146,23 @@ sub createEMLFile {
                 }
                 printXMLEndTag( "funding", "$project_indent4" );
             }
-			
+
 			# NEW  0.4 #
-			if (@research_awards_funder_name  
-				&& @research_awards_funder_identifier  
-				&& @research_awards_award_number  
-				&& @research_awards_title 
-				&& @research_awards_award_URL 
+			if (@research_awards_funder_name
+				&& @research_awards_funder_identifier
+				&& @research_awards_award_number
+				&& @research_awards_title
+				&& @research_awards_award_URL
 				&& ($research_awards_project_number==$research_project_number[$project_count])) {
 					my $award_count = 0;
 					while ( $award_count <= $#research_awards_funder_name){
-						printXMLStartTag( "award", "$project_indent4" );	
+						printXMLStartTag( "award", "$project_indent4" );
 						printXMLString( $research_awards_funder_name[$award_count], "funderName", "$project_indent5" );
-						printXMLString( $research_awards_funder_identifier[$award_count], "funderIdentifier", "$project_indent5" );				
-						printXMLString( $research_awards_award_number[$award_count], "awardNumber", "$project_indent5" );				
-						printXMLString( $research_awards_title[$award_count], "title", "$project_indent5" );				
-						printXMLString( $research_awards_award_URL[$award_count], "awardUrl", "$project_indent5" );				
-						printXMLEndTag( "award", "$project_indent4" );	
+						printXMLString( $research_awards_funder_identifier[$award_count], "funderIdentifier", "$project_indent5" );
+						printXMLString( $research_awards_award_number[$award_count], "awardNumber", "$project_indent5" );
+						printXMLString( $research_awards_title[$award_count], "title", "$project_indent5" );
+						printXMLString( $research_awards_award_URL[$award_count], "awardUrl", "$project_indent5" );
+						printXMLEndTag( "award", "$project_indent4" );
 						$award_count = $award_count + 1;
 					}
 				}
@@ -3257,7 +3257,7 @@ sub createEMLFile {
         }
 
     }
-    
+
 
     ############################
     # Print DATATABLE section  #
@@ -3298,17 +3298,25 @@ sub createEMLFile {
         printXMLString( $data_object_name, "objectName", "4" );
         printXMLString( $data_object_size, "size", "4", $data_object_size_unit, "unit" );
         if ($dataset_datatable_download_url){
-			my $md5 = Digest::MD5->new;
-			$md5->addurl($dataset_datatable_download_url);
-			my $digest = $md5->hexdigest;
-			printXMLString( $digest, "authentication", "4", "MD5", "method" );						
-		}
-		else {
-			$lb_out->insert( "end", "  " );
-			$lb_out->insert( "end", "PLEASE NOTE: Unable to create MD5 checksum using the URL for the data file." );
-			$lb_out->insert( "end", "Please verity that the Dataset Download URL works." );				
-		}
-        
+             my $user_agent_dataset = LWP::UserAgent->new(
+                  ssl_opts => {verify_hostname=> 0 },
+                  protocols_allowed => ['https'],
+             );
+             my $dataset_file_request = HTTP::Request->new(GET => $dataset_datatable_download_url);
+             my $dataset_file_res = $user_agent_dataset->request($dataset_file_request);
+             my $dataset_file_content = $dataset_file_res->content;
+
+             my $md5 = Digest::MD5->new;
+	           my $digest = md5_hex($dataset_file_content);
+
+    	     printXMLString( $digest, "authentication", "4", "MD5", "method" );
+    	  }
+    	  else {
+    	     $lb_out->insert( "end", "  " );
+    	     $lb_out->insert( "end", "PLEASE NOTE: Unable to create MD5 checksum using the URL for the data file." );
+    	     $lb_out->insert( "end", "Please verity that the Dataset Download URL works." );
+    	  }
+
         printXMLString( $data_object_char_encoding, "characterEncoding", "4" );
 
         if ( $num_header_lines
@@ -3328,7 +3336,7 @@ sub createEMLFile {
                 printXMLString( $num_header_lines, "numHeaderLines", "6" );
                 printXMLString( $data_record_delimiter, "recordDelimiter", "6");
                 printXMLString( $data_attribute_orientation, "attributeOrientation", "6" );
-                
+
 
                 if ($data_field_delimiter) {
                     printXMLStartTag( "simpleDelimited", "6" );
@@ -3349,7 +3357,7 @@ sub createEMLFile {
 
             printXMLEndTag( "dataFormat", "4" );
         }
-	
+
 	    if ( $dataset_datatable_download_url
 	        || $dataset_offline_medium_name
 	        || $dataset_offline_medium_density
@@ -3359,93 +3367,93 @@ sub createEMLFile {
 	        || @embedded_data )
 	    {
 	        printXMLStartTag( "distribution", "4" );
-	
+
 	        if (@embedded_data) {
 	            printXMLStartTag( "inline", "5" );
-	
+
 	            my $embedded_data_rows = 0;
 	            while ( $embedded_data_rows <= $#embedded_data ) {
-	
+
 	                print XML "$embedded_data[$embedded_data_rows]\n";
-	
+
 	                $embedded_data_rows = $embedded_data_rows + 1;
 	            }
-	
+
 	            printXMLEndTag( "inline", "5" );
-	
+
 	        }
-	
+
 	        if ($dataset_datatable_download_url) {
 	            printXMLStartTag( "online", "5" );
 	            printXMLString( $dataset_datatable_download_url, "url", "6", $dataset_datatable_download_url_function, "function" ); # MODIFIED
 	            printXMLEndTag( "online", "5" );
 	        }
-	
+
 	        if (
 	            $dataset_offline_medium_name
 	            || $dataset_offline_medium_density
 	            || $dataset_offline_medium_density_units
 	            || $dataset_offline_medium_volume
 	            || $dataset_offline_medium_format
-	
+
 	          )
 	        {
 	            printXMLStartTag( "offline", "5" );
-	
+
 	            printXMLString( $dataset_offline_medium_name, "mediumName", "6" );
 	            printXMLString( $dataset_offline_medium_density, "mediumDensity", "6" );
 	            printXMLString( $dataset_offline_medium_density_units, "mediumDensityUnits", "6" );
 	            printXMLString( $dataset_offline_medium_volume, "mediumVolume", "6" );
 	            printXMLString( $dataset_offline_medium_format, "mediumFormat", "6" );
-	
+
 	            printXMLEndTag( "offline", "5" );
 	        }
 	        else {
 	        }
-	        
+
 	        if ( $dataset_datatable_access_authentication_info || @dataset_datatable_principal_permission_info || @dataset_datatable_principal_access_info ) {
 
 		        if ($dataset_datatable_access_authentication_info) {
-		
+
 		            print XML "$indent$indent$indent$indent$indent" . "<access " . "$dataset_datatable_access_authentication_info" . ">\n";
-		
+
 		        }
 		        else {
-		
+
 		            # Access defaults to values needed for KNB Metacat if blank in template
 		            print XML "$indent$indent$indent$indent$indent" . "<access authSystem=\"knb\" order=\allowFirst\" scope=\"document\">\n";
-		
+
 		        }
-		
+
 		        my $access_datatable = 0;
-		
+
 		        while ( $access_datatable <= $#dataset_datatable_principal_access_info ) {
-		
+
 		            if ( @dataset_datatable_principal_permission_info && @dataset_datatable_principal_access_info ) {
-		
+
 		                printXMLStartTag( "allow", "6" );
-		                
+
 						my $dataset_datatable_principal_access_info = $dataset_datatable_principal_access_info[$access_datatable];
 						$dataset_datatable_principal_access_info =~ s/\s//g;
 						my $dataset_datatable_principal_permission_info = $dataset_datatable_principal_permission_info[$access_datatable];
 						$dataset_datatable_principal_permission_info = lc($dataset_datatable_principal_permission_info);
 						$dataset_datatable_principal_permission_info =~ s/\s//g;
-						
+
 		                printXMLString( $dataset_datatable_principal_access_info, "principal", "7" );
 		                printXMLString( $dataset_datatable_principal_permission_info, "permission", "7" );
-		
+
 		                printXMLEndTag( "allow", "6" );
-		
+
 		            }
 		            $access_datatable = $access_datatable + 1;
 		        }
 		        printXMLEndTag( "access", "5" );
-		
+
 		    }
 
-	
+
 	        printXMLEndTag( "distribution", "4" );
-	
+
 	    }
 
         printXMLEndTag( "physical", "3" );
@@ -3569,7 +3577,7 @@ sub createEMLFile {
                         }
                     }
                     if ( $repeat eq "yes" ) {
-                    	
+
                     }
                     else {
                         my $custom_unit_stmml;
@@ -3706,7 +3714,7 @@ sub createEMLFile {
                 printXMLEndTag( "methodStep",  "6" );
                 printXMLEndTag( "methods",      "5" );
             }
-			
+
 			# NEW 0.4 #
 			if (@attribute_annotation_valueURI[$attribute_count]
 				&& @attribute_annotation_propertyURI[$attribute_count]
@@ -3714,10 +3722,10 @@ sub createEMLFile {
 				&& @attribute_annotation_valueURI_label[$attribute_count]
 				&& ($attribute_annotation_name[$attribute_count] eq $attribute_name[$attribute_count])
 				) {
-				
+
 					printXMLStartTag( "annotation", "5" );
 					printXMLString( $attribute_annotation_propertyURI[$attribute_count], "propertyURI", "6", $attribute_annotation_propertyURI_label[$attribute_count], "label" );
-					printXMLString( $attribute_annotation_valueURI[$attribute_count], "valueURI", "6", $attribute_annotation_valueURI_label[$attribute_count] , "label" ); 
+					printXMLString( $attribute_annotation_valueURI[$attribute_count], "valueURI", "6", $attribute_annotation_valueURI_label[$attribute_count] , "label" );
 					printXMLEndTag( "annotation", "5" );
 
 			}
@@ -3866,7 +3874,7 @@ sub createEMLFile {
                 else {
                     printXMLEndTag( $row_tags[$end_tag], $end_tag + 2 );
                     $end_tag = $end_tag - 1;
-                    
+
                 }
             }
 
@@ -3903,7 +3911,7 @@ sub createEMLFile {
 
         $lb_out->insert( "end", "  " );
         $lb_out->insert( "end", "Done!  Validating against schema..." );
-                
+
         sub cwd_directory_die {
             my $cwd = $save_dir;
             $lb_out->insert( "end", "  " );
@@ -3911,7 +3919,7 @@ sub createEMLFile {
             $lb_out->insert( "end", "       ($save_dir)." );
             $lb_out->insert( "end", "       Please verify that this directory exists and that you can write to the directory." );
         }
-        
+
         sub read_file_die {
             my $cwd = $_[0];
             $lb_out->insert( "end", "  " );
@@ -3919,7 +3927,7 @@ sub createEMLFile {
             $lb_out->insert( "end", "       ($eml_file)." );
             $lb_out->insert( "end", "       Please verify that this file exists and that you can read the file." );
         }
-                
+
         my $doc = XML::LibXML->new(XML_LIBXML_LINENUMBERS => 1)->parse_file($eml_file);
 		my $ua = LWP::UserAgent->new(timeout => 10);
 		$ua->env_proxy;
@@ -3964,20 +3972,20 @@ sub createEMLFile {
 
 		    my $message = ":-O  " . "$eml_file" . " was created - EML " . "Errors detected!";
 		    $lb_out->insert( "end", $message );
-		    $lb_out->insert( "end", "     Please see the messages above or the error log  ( " . "$save_dir" . "/error.log" . " ) for details." );		       
+		    $lb_out->insert( "end", "     Please see the messages above or the error log  ( " . "$save_dir" . "/error.log" . " ) for details." );
           }
-		
+
 	  else {
 	      my $message = ":-)  " . "$eml_file" . " was created - No EML errors detected";
 	      $lb_out->insert( "end", $message );
 	  }
 
-       
+
         ############
         percentDone;
         ############
 
-       
+
         ############
         percentDone;
         ############

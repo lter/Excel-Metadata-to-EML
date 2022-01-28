@@ -1,6 +1,6 @@
 README 
 
-EXCEL METADATA TO EML - Version 0.4  (updated 2021 December 1)
+EXCEL METADATA TO EML - Version 0.4  (updated 2022 January 28)
 
 The standalone executables and the Perl script described below convert 
 LTER EML Metadata Submission Template files (see xlsx2EML-04_Metadata_Template_FCE.xlsx) 
@@ -51,7 +51,7 @@ LICENSE
 	of the author(s) and do not necessarily reflect the views of the National
 	Science Foundation.
 	
-	Copyright (C) 2004, 2010, 2013, 2017, 2021  Florida International University
+	Copyright (C) 2004, 2010, 2013, 2017, 2021, 2022  Florida International University
 	
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License

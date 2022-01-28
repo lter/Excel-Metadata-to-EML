@@ -169,3 +169,10 @@
 
 12/01/2021 Mike Rugge, FCE - Fixed MD5 generation
 	Fixed the generation of MD5 from the dataset download URL in the Perl program using object-oriented commands from the Digest::MD5:File Perl module
+	
+01/28/2022 Mike Rugge, FCE - Changed MD5 generation process to generate correct MD5
+	The MD5 generated with the earlier version was incorrect. 
+	Changed the procedure for the generation of MD5 from the dataset download URL 
+	in the Perl program.
+	Now, Perl program uses LWP::UserAgent and HTTP::Request Perl modules to download 
+	the file content and Digest::MD5 to calculate the MD5 of the file content.
